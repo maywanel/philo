@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 01:10:41 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/15 03:27:27 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/03/20 02:13:29 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_philo
 	t_fork				*left_fork;
 	t_fork				*right_fork;
 	t_data				*data;
+	long				last_meal;
 }						t_philo;
 
 struct					s_data
@@ -52,19 +53,25 @@ struct					s_data
 	long				time_to_eat;
 	long				time_to_sleep;
 	long				nbr_of_meals;
-	bool				start;
+	long				start_time;
 	bool				end;
 	t_fork				*forks;
 	t_philo				*philos;
+	t_mtx				die_time_mtx;
+	t_mtx				print;
 };
 
-void init_data(t_data *data, char **av);
+void	init_data(t_data *data, char **av);
 void	wrong_nbr_of_arg();
-long ft_atol(char *str);
-char *valid_input(char *str);
-void error_exit(char *s);
-void init_forks(t_data *data);
-void init_philos(t_data *data);
-void clean(t_data*data);
+long	ft_atol(char *str);
+char	*valid_input(char *str);
+void	error_exit(char *s);
+void	init_forks(t_data *data);
+void	init_philos(t_data *data);
+void	clean(t_data*data);
+void	start_the_dinner(t_data *data);
+void	*philosopher_routine(void *arg);
+long	get_current_time(void);
+void	*monitor_routine(void *arg);
 
 #endif

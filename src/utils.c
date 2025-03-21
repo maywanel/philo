@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:42:52 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/15 02:45:15 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/03/20 02:13:19 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,12 @@ long ft_atol(char *str)
         i++;
     }
     return (num);
+}
+
+long get_current_time(void)
+{
+    struct timeval tv;
+    
+    gettimeofday(&tv, NULL);
+    return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
