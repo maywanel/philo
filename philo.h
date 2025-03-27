@@ -57,8 +57,11 @@ struct					s_data
 	bool				end;
 	t_fork				*forks;
 	t_philo				*philos;
-	t_mtx				die_time_mtx;
-	t_mtx				print;
+	pthread_mutex_t print;
+    pthread_mutex_t die_time_mtx;
+    pthread_mutex_t death_check;
+    pthread_mutex_t meal_check;
+	int full_philos;
 };
 
 void	init_data(t_data *data, char **av);
@@ -72,6 +75,8 @@ void	clean(t_data*data);
 void	start_the_dinner(t_data *data);
 void	*philosopher_routine(void *arg);
 long	get_current_time(void);
-void	*monitor_routine(void *arg);
+void	print_status(t_philo *philo, char *status);
+void	sim_start_delay(time_t start_time);
+void	philo_sleep(long milliseconds);
 
 #endif

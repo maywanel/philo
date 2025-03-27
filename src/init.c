@@ -35,7 +35,9 @@ void	init_data(t_data *data, char **av)
 		(free(data->philos), error_exit("MALLOC FAILED\n"));
 	data->start_time = get_current_time();
 	pthread_mutex_init(&data->print, NULL);
-	pthread_mutex_init(&data->die_time_mtx, NULL);
+    pthread_mutex_init(&data->die_time_mtx, NULL);
+    pthread_mutex_init(&data->death_check, NULL);
+    pthread_mutex_init(&data->meal_check, NULL);
 	init_philos(data);
 }
 
