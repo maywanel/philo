@@ -76,7 +76,6 @@ void	start_the_dinner(t_data *data);
 void	*philosopher_routine(void *arg);
 long	get_current_time(void);
 void	print_status(t_philo *philo, char *status);
-void	sim_start_delay(time_t start_time);
-void	philo_sleep(long milliseconds);
+void	philo_sleep(t_data *data, long milliseconds);
 
 #endif

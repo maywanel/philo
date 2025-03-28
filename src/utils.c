@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include "philo.h"
 
 long ft_atol(char *str)
 {
@@ -35,38 +35,17 @@ long get_current_time(void)
     gettimeofday(&tv, NULL);
     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
-void	philo_sleep(long milliseconds)
+void	philo_sleep(t_data *data, long milliseconds)
 {
-    long	start;
-    long	current;
-    long	elapsed;
-    long	remaining;
-
-    if (milliseconds <= 0)
-        return;
+    long    start;
+    long    test;
 
     start = get_current_time();
-    while (1)
+    while (!data->end)
     {
-        current = get_current_time();
-        elapsed = current - start;
-
-        if (elapsed >= milliseconds)
-            break;
-
-        remaining = milliseconds - elapsed;
-
-        if (remaining > 10)
-            usleep(5000);
-        else if (remaining > 1)
-            usleep(remaining * 800);
-        else
-            break;
+        test = get_current_time() - start;
+        if (test >= milliseconds)
+            break ;
+        usleep(1);
     }
-}
-
-void	sim_start_delay(time_t start_time)
-{
-	while (get_current_time() < start_time)
-		continue ;
 }

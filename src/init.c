@@ -19,9 +19,9 @@ void	init_data(t_data *data, char **av)
 		error_exit("200 philo at MAX\n");
 	else if (data->philo_nbr == 0)
 		error_exit("need at least 1 philo\n");
-	data->time_to_die = ft_atol(av[2]) * 1000;
-	data->time_to_eat = ft_atol(av[3]) * 1000;
-	data->time_to_sleep = ft_atol(av[4]) * 1000;
+	data->time_to_die = ft_atol(av[2]);
+	data->time_to_eat = ft_atol(av[3]);
+	data->time_to_sleep = ft_atol(av[4]);
 	if (!av[5])
 		data->nbr_of_meals = -1;
 	else

@@ -29,8 +29,20 @@ void	wrong_nbr_of_arg()
 	exit(1);
 }
 
-void clean(t_data*data)
+void clean(t_data *data)
 {
+	int i;
+
+	i = 0;
+	while (i < data->philo_nbr)
+	{
+		pthread_mutex_destroy(&data->forks[i].fork);
+		i++;
+	}
+	pthread_mutex_destroy(&data->print);
+	pthread_mutex_destroy(&data->die_time_mtx);
+	pthread_mutex_destroy(&data->death_check);
+	pthread_mutex_destroy(&data->meal_check);
 	free(data->philos);
 	free(data->forks);
 }
