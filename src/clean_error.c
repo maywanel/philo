@@ -12,13 +12,13 @@
 
 #include "philo.h"
 
-void error_exit(char *s)
+void	error_exit(char *s)
 {
-    ft_printf("%s", s);
-    exit(1);
+	ft_printf("%s", s);
+	exit(1);
 }
 
-void	wrong_nbr_of_arg()
+void	wrong_nbr_of_arg(void)
 {
 	ft_printf("USAGE: ./philo");
 	ft_printf(" number_of_philosophers");
@@ -29,9 +29,9 @@ void	wrong_nbr_of_arg()
 	exit(1);
 }
 
-void clean(t_data *data)
+void	clean(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->philo_nbr)

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:51:24 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/20 02:11:28 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/03/29 18:38:54 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	init_data(t_data *data, char **av)
 {
 	data->philo_nbr = ft_atol(av[1]);
-	if (data->philo_nbr >  MAX_PHILO)
+	if (data->philo_nbr > MAX_PHILO)
 		error_exit("200 philo at MAX\n");
 	else if (data->philo_nbr == 0)
 		error_exit("need at least 1 philo\n");
@@ -35,15 +35,15 @@ void	init_data(t_data *data, char **av)
 		(free(data->philos), error_exit("MALLOC FAILED\n"));
 	data->start_time = get_current_time();
 	pthread_mutex_init(&data->print, NULL);
-    pthread_mutex_init(&data->die_time_mtx, NULL);
-    pthread_mutex_init(&data->death_check, NULL);
-    pthread_mutex_init(&data->meal_check, NULL);
+	pthread_mutex_init(&data->die_time_mtx, NULL);
+	pthread_mutex_init(&data->death_check, NULL);
+	pthread_mutex_init(&data->meal_check, NULL);
 	init_philos(data);
 }
 
-void init_philos(t_data *data)
+void	init_philos(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	init_forks(data);
@@ -67,14 +67,15 @@ void init_philos(t_data *data)
 		i++;
 	}
 }
-void init_forks(t_data *data)
+
+void	init_forks(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->philo_nbr)
 	{
-		data->forks[i].id  = i;
+		data->forks[i].id = i;
 		pthread_mutex_init(&data->forks[i].fork, NULL);
 		i++;
 	}

@@ -12,40 +12,41 @@
 
 #include "philo.h"
 
-long ft_atol(char *str)
+long	ft_atol(char *str)
 {
-    long num;
-    int i;
+	long	num;
+	int		i;
 
-    num = 0;
-    i = 0;
-    str = valid_input(str);
-    while (ft_isdigit(str[i]))
-    {
-        num = (num * 10) + (str[i] - 48);
-        i++;
-    }
-    return (num);
+	num = 0;
+	i = 0;
+	str = valid_input(str);
+	while (ft_isdigit(str[i]))
+	{
+		num = (num * 10) + (str[i] - 48);
+		i++;
+	}
+	return (num);
 }
 
-long get_current_time(void)
+long	get_current_time(void)
 {
-    struct timeval tv;
-    
-    gettimeofday(&tv, NULL);
-    return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
+
 void	philo_sleep(t_data *data, long milliseconds)
 {
-    long    start;
-    long    test;
+	long	start;
+	long	test;
 
-    start = get_current_time();
-    while (!data->end)
-    {
-        test = get_current_time() - start;
-        if (test >= milliseconds)
-            break ;
-        usleep(1);
-    }
+	start = get_current_time();
+	while (!data->end)
+	{
+		test = get_current_time() - start;
+		if (test >= milliseconds)
+			break ;
+		usleep(1);
+	}
 }
