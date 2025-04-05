@@ -6,20 +6,25 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 01:10:41 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/29 22:17:23 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/05 02:12:17 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <pthread.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <sys/time.h>
 
 # define MAX_PHILO 200
+# define FORK "has taken a fork\n"
+# define EAT "is eating\n"
+# define SLEEP "is sleeping\n"
+# define THINK "is thinking\n"
+# define DIED "died\n"
 
 typedef pthread_mutex_t	t_mtx;
 typedef struct s_data	t_data;

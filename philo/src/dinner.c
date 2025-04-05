@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 18:00:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/29 18:51:11 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/05 02:07:10 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	eat_sleep_routine(t_philo *philo)
 {
 	acquire_forks(philo);
-	print_status(philo, " is eating\n");
+	print_status(philo, EAT);
 	pthread_mutex_lock(&(philo->data->die_time_mtx));
 	philo->last_meal = get_current_time();
 	pthread_mutex_unlock(&(philo->data->die_time_mtx));
@@ -24,7 +24,7 @@ static void	eat_sleep_routine(t_philo *philo)
 	if (philo->data->nbr_of_meals != -1)
 		philo->meal_c++;
 	pthread_mutex_unlock(&(philo->data->meal_check));
-	print_status(philo, " is sleeping\n");
+	print_status(philo, SLEEP);
 	pthread_mutex_unlock(&(philo->left_fork->fork));
 	pthread_mutex_unlock(&(philo->right_fork->fork));
 	philo_sleep(philo->data, philo->sleep_time);
@@ -69,7 +69,7 @@ static int	check_philosopher_death(t_data *data, int i)
 		|| data->philos[i].death)
 	{
 		pthread_mutex_unlock(&data->die_time_mtx);
-		print_status(&data->philos[i], " died\n");
+		print_status(&data->philos[i], DIED);
 		set_simulation_end(data);
 		return (1);
 	}

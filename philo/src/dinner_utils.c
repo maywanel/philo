@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/29 22:17:18 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/05 02:08:18 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	print_status(t_philo *philo, char *status)
 void	*lone_philo_routine(t_philo *philo)
 {
 	pthread_mutex_lock(&(philo->right_fork->fork));
-	print_status(philo, " has taken a fork\n");
+	print_status(philo, FORK);
 	philo_sleep(philo->data, philo->die_time);
-	print_status(philo, " has died\n");
+	print_status(philo, DIED);
 	philo->death = true;
 	set_simulation_end(philo->data);
 	pthread_mutex_unlock(&(philo->right_fork->fork));
@@ -74,6 +74,6 @@ void	think_routine(t_philo *philo, bool silent)
 	if (time_to_think > 600)
 		time_to_think = 200;
 	if (silent == false)
-		print_status(philo, " is thinking\n");
+		print_status(philo, THINK);
 	philo_sleep(philo->data, time_to_think);
 }

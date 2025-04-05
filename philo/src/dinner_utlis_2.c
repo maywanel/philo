@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:46:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/29 18:46:53 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/05 02:08:40 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@ void	acquire_forks(t_philo *philo)
 	if (philo->left_fork->id < philo->right_fork->id)
 	{
 		pthread_mutex_lock(&(philo->left_fork->fork));
-		print_status(philo, " has taken a fork\n");
+		print_status(philo, FORK);
 		pthread_mutex_lock(&(philo->right_fork->fork));
-		print_status(philo, " has taken a fork\n");
+		print_status(philo, FORK);
 	}
 	else
 	{
 		pthread_mutex_lock(&(philo->right_fork->fork));
-		print_status(philo, " has taken a fork\n");
+		print_status(philo, FORK);
 		pthread_mutex_lock(&(philo->left_fork->fork));
-		print_status(philo, " has taken a fork\n");
+		print_status(philo, FORK);
 	}
 }
 
