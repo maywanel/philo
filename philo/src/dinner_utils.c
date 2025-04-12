@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/05 02:08:18 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/11 18:19:01 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	think_routine(t_philo *philo, bool silent)
 	pthread_mutex_unlock(&philo->data->die_time_mtx);
 	if (time_to_think < 0)
 		time_to_think = 0;
-	if (time_to_think == 0 && silent == true)
-		time_to_think = 1;
+	if (time_to_think + philo->eat_time >= philo->die_time)
+		time_to_think = 0;
 	if (time_to_think > 600)
 		time_to_think = 200;
 	if (silent == false)

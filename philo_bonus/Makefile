@@ -5,7 +5,7 @@ RM			=	rm -rf
 FILES		=	${wildcard src/*.c}
 OBJ			=	$(FILES:.c=.o)
 NAME 		= 	philo
-LIB			=	philo.h
+LIB			=	philo_bonus.h
 
 GREEN		=	\e[38;5;118m
 YELLOW		=	\e[38;5;226m
@@ -17,8 +17,8 @@ _INFO		=	[$(YELLOW)INFO$(RESET)]
 
 all: make_libft $(NAME) clean
 
-$(NAME): philo.c $(LIB) $(OBJ)
-	@$(CC) philo.c -o $(NAME) $(OBJ) $(LDFLAGS)
+$(NAME): philo_bonus.c $(LIB) $(OBJ)
+	@$(CC) philo_bonus.c -o $(NAME) $(OBJ) $(LDFLAGS)
 	@printf "$(SUCCESS) $(BLUE)philo ready\n"
 
 make_libft:

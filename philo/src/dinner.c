@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 18:00:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/05 02:07:10 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:30:34 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	*monitor_routine(void *data_ptr)
 				return (NULL);
 			i++;
 		}
-		usleep(1);
+		usleep(50);
 	}
 	return (NULL);
 }

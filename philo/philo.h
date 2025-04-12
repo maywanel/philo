@@ -19,12 +19,12 @@
 # include <stdio.h>
 # include <sys/time.h>
 
-# define MAX_PHILO 200
-# define FORK "has taken a fork\n"
-# define EAT "is eating\n"
-# define SLEEP "is sleeping\n"
-# define THINK "is thinking\n"
-# define DIED "died\n"
+# define MAX_PHILO 2000
+# define FORK " has taken a fork\n"
+# define EAT " is eating\n"
+# define SLEEP " is sleeping\n"
+# define THINK " is thinking\n"
+# define DIED " died\n"
 
 typedef pthread_mutex_t	t_mtx;
 typedef struct s_data	t_data;
