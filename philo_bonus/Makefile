@@ -4,7 +4,7 @@ LDFLAGS 	= 	-L../libft -lft
 RM			=	rm -rf
 FILES		=	${wildcard src/*.c}
 OBJ			=	$(FILES:.c=.o)
-NAME 		= 	philo
+NAME 		= philo_bonus
 LIB			=	philo_bonus.h
 
 GREEN		=	\e[38;5;118m
