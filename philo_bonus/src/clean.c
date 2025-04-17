@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:34:40 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/14 04:24:33 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:02:16 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void clean(t_data *data)
   sem_unlink(SEM_EAT);
   sem_unlink(SEM_DEAD);
   sem_unlink(SEM_PRINT);
-  free(data->philos);
+  if (data->philos)
+    free(data->philos);
+  if (data->pids)
   free(data->pids);
 }

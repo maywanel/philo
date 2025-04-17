@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:18:51 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/14 19:11:16 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:23:12 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,8 @@ void check_number_meals(t_philo *philo)
     sem_wait(philo->data->eat);
     if (philo->meal_c >= philo->data->nbr_of_meals && philo->data->nbr_of_meals != -1)
     {
-        philo->data->full++;
-        if (philo->data->full >= philo->data->nbr_of_philos)
-        {
-            sem_post(philo->data->eat);
-            clean(philo->data);
-            exit(EXIT_SUCCESS);
-        }
+        clean(philo->data);
+        exit(0);
     }
     sem_post(philo->data->eat);
 }
@@ -50,7 +45,6 @@ void grab_forks(t_philo *philo)
     if (sem_wait(philo->data->forks) != 0)
     {
         error_print("Failed to acquire fork", philo->data);
-        clean(philo->data);
         exit(EXIT_FAILURE);
     }
     print_status(philo, FORK);
@@ -59,7 +53,6 @@ void grab_forks(t_philo *philo)
     {
         sem_post(philo->data->forks);
         error_print("Failed to acquire second fork", philo->data);
-        clean(philo->data);
         exit(EXIT_FAILURE);
     }
     print_status(philo, FORK);
@@ -84,6 +77,14 @@ void eat_sleep_routine(t_philo *philo)
     philo_sleep(philo->data, philo->data->time_to_sleep);
 }
 
+void lone_philo_routine(t_philo *philo)
+{
+    print_status(philo, FORK);
+    philo_sleep(philo->data, philo->data->time_to_die);
+    print_status(philo, DIED);
+    exit(1);
+}
+
 void *death_monitor(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
@@ -98,10 +99,12 @@ void *death_monitor(void *arg)
         
         if (time_since_last_meal >= philo->data->time_to_die)
         {
-            print_status(philo, DIED);
+            sem_wait(philo->data->dead);
             philo->death = 1;
+            sem_post(philo->data->dead);
             sem_post(philo->data->eat);
-            exit(0);
+            print_status(philo, DIED);
+            return NULL;
         }
         sem_post(philo->data->eat);
         usleep(1000);
@@ -109,17 +112,9 @@ void *death_monitor(void *arg)
     return NULL;
 }
 
-void lone_philo_routine(t_philo *philo)
-{
-    print_status(philo, FORK);
-    philo_sleep(philo->data, philo->data->time_to_die);
-    print_status(philo, DIED);
-    clean(philo->data);
-    exit(1);
-}
-
 void philo_routine(t_philo *philo)
-{    
+{
+    pthread_t monitor;
     
     philo->last_meal = get_current_time();
     if (philo->data->nbr_of_philos == 1)
@@ -127,10 +122,27 @@ void philo_routine(t_philo *philo)
         lone_philo_routine(philo);
         return;
     }
+    
+    if (pthread_create(&monitor, NULL, death_monitor, philo) != 0)
+    {
+        error_print("Failed to create monitor thread", philo->data);
+        exit(EXIT_FAILURE);
+    }
     if (philo->id % 2 != 0)
     think_routine(philo, true);
-    while(!philo->death)
+    
+    while(1)
     {
+        printf("death: %d\n", philo->death);
+        sem_wait(philo->data->dead);
+        if (philo->death)
+        {
+            sem_post(philo->data->dead);
+            pthread_join(monitor, NULL);
+            clean(philo->data);
+            exit(1);
+        }
+        sem_post(philo->data->dead);
         eat_sleep_routine(philo);
         check_number_meals(philo);
         think_routine(philo, false);
@@ -139,9 +151,11 @@ void philo_routine(t_philo *philo)
 
 void start_the_dinner(t_data *data)
 {
-    pthread_t monitor;
     int i;
-    
+    int status;
+    pid_t pid;
+    int exit_code;
+
     i = 0;
     while (i < data->nbr_of_philos)
     {
@@ -150,25 +164,35 @@ void start_the_dinner(t_data *data)
         {
             error_print("fork failure", data);
             kill_all_pid(data, i);
-            clean(data);
             exit(EXIT_FAILURE);
         }
         else if (data->pids[i] == 0)
         {
-            if (pthread_create(&monitor, NULL, death_monitor, &data->philos[i]) != 0)
-            {
-                error_print("Failed to create monitor thread", data);
-                clean(data);
-                exit(EXIT_FAILURE);
-            }
             philo_routine(&data->philos[i]);
-            pthread_join(monitor, NULL);
-            clean(data);
             exit(0);
         }
         i++;
         usleep(100);
     }
-    while (wait(NULL) != -1)
-        ;
+    pid = waitpid(-1, &status, 0);
+    while (pid > 0)
+    {
+        if ((status & 0x7F) == 0)
+        {
+            exit_code = (status >> 8) & 0xFF;
+            if (exit_code == 0)
+            {
+                data->full++;
+                if (data->full == data->nbr_of_philos)
+                    break;
+            }
+            else if (exit_code == 1)
+            {
+                kill_all_pid(data, data->nbr_of_philos);
+                break;
+            }
+        }
+        pid = waitpid(-1, &status, 0);
+    }
+    kill_all_pid(data, data->nbr_of_philos);
 }
