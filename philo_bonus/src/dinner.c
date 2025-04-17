@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:18:51 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/16 19:23:12 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/17 23:10:16 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,21 +93,16 @@ void *death_monitor(void *arg)
 
     while (1)
     {
-        sem_wait(philo->data->eat);
         current_time = get_current_time();
         time_since_last_meal = current_time - philo->last_meal;
         
         if (time_since_last_meal >= philo->data->time_to_die)
         {
-            sem_wait(philo->data->dead);
             philo->death = 1;
-            sem_post(philo->data->dead);
-            sem_post(philo->data->eat);
             print_status(philo, DIED);
-            return NULL;
+            sem_post(philo->data->dead);
+            break;
         }
-        sem_post(philo->data->eat);
-        usleep(1000);
     }
     return NULL;
 }
@@ -128,21 +123,16 @@ void philo_routine(t_philo *philo)
         error_print("Failed to create monitor thread", philo->data);
         exit(EXIT_FAILURE);
     }
+    if (pthread_detach(monitor) != 0)
+    {
+        error_print("Failed to detach monitor thread", philo->data);
+        exit(EXIT_FAILURE);
+    }
     if (philo->id % 2 != 0)
-    think_routine(philo, true);
+        think_routine(philo, true);
     
     while(1)
     {
-        printf("death: %d\n", philo->death);
-        sem_wait(philo->data->dead);
-        if (philo->death)
-        {
-            sem_post(philo->data->dead);
-            pthread_join(monitor, NULL);
-            clean(philo->data);
-            exit(1);
-        }
-        sem_post(philo->data->dead);
         eat_sleep_routine(philo);
         check_number_meals(philo);
         think_routine(philo, false);
@@ -151,10 +141,8 @@ void philo_routine(t_philo *philo)
 
 void start_the_dinner(t_data *data)
 {
+    pthread_t death_watcher;
     int i;
-    int status;
-    pid_t pid;
-    int exit_code;
 
     i = 0;
     while (i < data->nbr_of_philos)
@@ -174,25 +162,22 @@ void start_the_dinner(t_data *data)
         i++;
         usleep(100);
     }
-    pid = waitpid(-1, &status, 0);
-    while (pid > 0)
+    if (pthread_create(&death_watcher, NULL, parent_death_monitor, data) != 0)
     {
-        if ((status & 0x7F) == 0)
-        {
-            exit_code = (status >> 8) & 0xFF;
-            if (exit_code == 0)
-            {
-                data->full++;
-                if (data->full == data->nbr_of_philos)
-                    break;
-            }
-            else if (exit_code == 1)
-            {
-                kill_all_pid(data, data->nbr_of_philos);
-                break;
-            }
-        }
-        pid = waitpid(-1, &status, 0);
+        error_print("Failed to create parent monitor thread", data);
+        kill_all_pid(data, data->nbr_of_philos);
+        exit(EXIT_FAILURE);
     }
+    while (wait(NULL) > 0)
+        ;
+    pthread_join(death_watcher, NULL);
     kill_all_pid(data, data->nbr_of_philos);
+}
+
+void *parent_death_monitor(void *arg)
+{
+    t_data *data = (t_data *)arg;
+    
+    sem_wait(data->dead);
+    return NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/16 19:14:29 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/04/17 22:51:20 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	think_routine(t_philo *philo, bool silent);
 void	check_number_meals(t_philo *philo);
 void	grab_forks(t_philo *philo);
 void	lone_philo_routine(t_philo *philo);
+void *parent_death_monitor(void *arg);
 
 /* Clean */
 void	wrong_nbr_of_arg(void);
