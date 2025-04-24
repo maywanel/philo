@@ -111,6 +111,7 @@ void philo_routine(t_philo *philo)
 {
     pthread_t monitor;
     
+    philo->pid = getpid();
     philo->last_meal = get_current_time();
     if (philo->data->nbr_of_philos == 1)
     {
@@ -133,6 +134,11 @@ void philo_routine(t_philo *philo)
     
     while(1)
     {
+        if (philo->death)
+        {
+            clean(philo->data);
+            exit(1);
+        }
         eat_sleep_routine(philo);
         check_number_meals(philo);
         think_routine(philo, false);
@@ -179,5 +185,6 @@ void *parent_death_monitor(void *arg)
     t_data *data = (t_data *)arg;
     
     sem_wait(data->dead);
+    kill_all_pid(data, data->nbr_of_philos);
     return NULL;
 }

@@ -52,11 +52,32 @@ void philo_sleep(t_data *data, long time)
 {
     long start;
     long current;
-    (void)data;
+    int i;
+    t_philo *philo;
     
     start = get_current_time();
+    // Find the philosopher in the data structure by matching process ID
+    // This allows us to check the death flag while sleeping
+    i = 0;
+    while (i < data->nbr_of_philos)
+    {
+        philo = &data->philos[i];
+        if (philo->pid == getpid())
+            break;
+        i++;
+    }
+    
     while (1)
     {
+        // Check if this is a philosopher process and if death flag is set
+        // This allows us to detect death even while sleeping or eating
+        // and perform proper cleanup before exiting
+        if (i < data->nbr_of_philos && philo->death)
+        {
+            clean(data);
+            exit(1);
+        }
+        
         current = get_current_time();
         if (current - start >= time)
             break;
