@@ -65,8 +65,9 @@ void eat_sleep_routine(t_philo *philo)
     sem_wait(philo->data->eat);
     philo->last_meal = get_current_time();
     philo->meal_c++;
-    print_status(philo, EAT);
     sem_post(philo->data->eat);
+    
+    print_status(philo, EAT);
     
     philo_sleep(philo->data, philo->data->time_to_eat);
     
@@ -80,8 +81,18 @@ void eat_sleep_routine(t_philo *philo)
 void lone_philo_routine(t_philo *philo)
 {
     print_status(philo, FORK);
-    philo_sleep(philo->data, philo->data->time_to_die);
-    print_status(philo, DIED);
+    // For a single philosopher, just wait for time_to_die without releasing forks
+    usleep(philo->data->time_to_die * 1000); // Convert to microseconds
+    
+    // Hold the print semaphore to avoid race conditions
+    sem_wait(philo->data->print);
+    printf("%ld %d %s\n", get_current_time() - philo->data->start_time, 
+        philo->id, DIED);
+    
+    // Signal death to parent
+    sem_post(philo->data->dead);
+    
+    // Exit immediately
     exit(1);
 }
 
@@ -94,17 +105,30 @@ void *death_monitor(void *arg)
     while (1)
     {
         current_time = get_current_time();
+        
+        sem_wait(philo->data->eat);
         time_since_last_meal = current_time - philo->last_meal;
+        sem_post(philo->data->eat);
         
         if (time_since_last_meal >= philo->data->time_to_die)
         {
-            philo->death = 1;
-            print_status(philo, DIED);
+            // Hold the print semaphore to avoid race conditions
+            sem_wait(philo->data->print);
+            printf("%ld %d %s\n", get_current_time() - philo->data->start_time, 
+                philo->id, DIED);
+            
+            // Signal death to parent
             sem_post(philo->data->dead);
-            break;
+            
+            // Exit immediately to ensure the process terminates
+            exit(1);
         }
+        
+        // Sleep for a short time to avoid excessive CPU usage
+        usleep(1000); // 1ms check interval
     }
-    return NULL;
+    
+    return NULL; // This line will never be reached
 }
 
 void philo_routine(t_philo *philo)
@@ -149,15 +173,19 @@ void *parent_death_monitor(void *arg)
 {
     t_data *data = (t_data *)arg;
     
+    // Wait for a death signal - this should block until someone dies
     sem_wait(data->dead);
-    // Print a message to indicate death was detected by parent
-    printf("Parent detected death, terminating all philosophers\n");
-    fflush(stdout); // Ensure output is flushed
-    // Immediately kill all child processes when death is detected
+    
+    // Debug output to confirm we received a death signal
+    printf("[Parent] Death detected, killing all philosophers\n");
+    
+    // Kill all child processes
     kill_all_pid(data, data->nbr_of_philos);
-    // Set a flag to indicate to the parent that we should exit
-    data->full = 1; // Reusing the full flag as an exit indicator
-    return NULL; // Changed back to return NULL as we're using a flag now
+    
+    // Signal the main thread to exit
+    data->full = 1;
+    
+    return NULL;
 }
 
 void start_the_dinner(t_data *data)
@@ -192,34 +220,28 @@ void start_the_dinner(t_data *data)
         exit(EXIT_FAILURE);
     }
     
-    // Wait with timeout logic
     while (1)
     {
-        // Check if death was detected
         if (data->full == 1)
         {
             break;
         }
         
-        // Try to wait for any child, but don't block
         pid = waitpid(-1, &status, WNOHANG);
         
-        // If no process status changed, sleep a short time
         if (pid == 0)
         {
-            usleep(1000); // Short sleep
+            usleep(1000);
             continue;
         }
         
-        // If error or no more children, break
         if (pid == -1)
         {
             break;
         }
     }
     
-    // Final cleanup
-    pthread_cancel(death_watcher); // Cancel the monitor thread
-    pthread_join(death_watcher, NULL); // Wait for it to finish
-    kill_all_pid(data, data->nbr_of_philos); // Final safety check
+    pthread_cancel(death_watcher);
+    pthread_join(death_watcher, NULL);
+    kill_all_pid(data, data->nbr_of_philos);
 }

@@ -52,6 +52,7 @@ void philo_sleep(t_data *data, long time)
 {
     long start;
     long current;
+    long elapsed;
     int i;
     t_philo *philo;
     
@@ -67,7 +68,9 @@ void philo_sleep(t_data *data, long time)
         i++;
     }
     
-    while (1)
+    // Loop until the time has passed, checking for death periodically
+    elapsed = 0;
+    while (elapsed < time)
     {
         // Check if this is a philosopher process and if death flag is set
         // This allows us to detect death even while sleeping or eating
@@ -78,9 +81,10 @@ void philo_sleep(t_data *data, long time)
             exit(1);
         }
         
+        // Sleep in smaller chunks to check for death more frequently
+        usleep(500);
+        
         current = get_current_time();
-        if (current - start >= time)
-            break;
-        usleep(100);
+        elapsed = current - start;
     }
 }
