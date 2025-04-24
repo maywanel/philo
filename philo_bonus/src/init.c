@@ -57,7 +57,6 @@ void init_sems(t_data *data)
         exit(EXIT_FAILURE);
     }
 
-    // Initialize with count 0 to block until a death occurs
     data->dead = sem_open(SEM_DEAD, O_CREAT, 0644, 0);
     if (data->dead == SEM_FAILED)
     {
