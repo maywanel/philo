@@ -12,6 +12,8 @@ The root issue was in the death handling mechanism:
 2. However, there was no proper mechanism for the death detection to propagate to the main philosopher process routine.
 3. When using a direct `exit(1)` call in the death_monitor thread, the program would terminate without proper cleanup, causing memory leaks.
 4. Without an exit call, the program would hang indefinitely.
+5. Even with proper death flag checking in child processes, there was still an intermittent hang issue due to the parent process not forcefully terminating all child processes.
+6. The final hang issue was due to the parent process blocking indefinitely in the `wait()` call, even after killing the child processes.
 
 ## Changes Made
 
@@ -105,15 +107,104 @@ void philo_sleep(t_data *data, long time)
 }
 ```
 
+### 5. Improved Parent Process Death Handling
+
+Modified the parent process to immediately terminate all child processes when a death is detected and use a non-blocking wait approach:
+
+```c
+void *parent_death_monitor(void *arg)
+{
+    t_data *data = (t_data *)arg;
+    
+    sem_wait(data->dead);
+    // Print a message to indicate death was detected by parent
+    printf("Parent detected death, terminating all philosophers\n");
+    fflush(stdout); // Ensure output is flushed
+    // Immediately kill all child processes when death is detected
+    kill_all_pid(data, data->nbr_of_philos);
+    // Set a flag to indicate to the parent that we should exit
+    data->full = 1; // Reusing the full flag as an exit indicator
+    return NULL;
+}
+```
+
+### 6. Enhanced Process Termination
+
+Improved `kill_all_pid` to be more aggressive and reliable in terminating child processes:
+
+```c
+void kill_all_pid(t_data *data, int last)
+{
+  int i;
+
+  i = 0; // Start from 0 instead of 1 to ensure we kill all processes
+  if (!data || !data->pids)
+    return ;
+  while (i < last)
+  {
+    if (data->pids[i] > 0)
+    {
+      kill(data->pids[i], SIGKILL); // Explicitly use SIGKILL
+      waitpid(data->pids[i], NULL, 0); // Wait for the process to actually terminate
+    }
+    i++;
+  }
+}
+```
+
+### 7. Non-Blocking Wait in Parent Process
+
+Replaced the blocking `wait()` with a non-blocking approach that checks for death detection:
+
+```c
+void start_the_dinner(t_data *data)
+{
+    // ... existing code
+    
+    // Wait with timeout logic
+    while (1)
+    {
+        // Check if death was detected
+        if (data->full == 1)
+        {
+            break;
+        }
+        
+        // Try to wait for any child, but don't block
+        pid = waitpid(-1, &status, WNOHANG);
+        
+        // If no process status changed, sleep a short time
+        if (pid == 0)
+        {
+            usleep(1000); // Short sleep
+            continue;
+        }
+        
+        // If error or no more children, break
+        if (pid == -1)
+        {
+            break;
+        }
+    }
+    
+    // Final cleanup
+    pthread_cancel(death_watcher); // Cancel the monitor thread
+    pthread_join(death_watcher, NULL); // Wait for it to finish
+    kill_all_pid(data, data->nbr_of_philos); // Final safety check
+}
+```
+
 ## Results
 
 With these changes:
 
 1. The program correctly detects philosopher deaths
 2. When a death occurs, the philosopher process properly cleans up resources before exiting
-3. The parent process is notified of the death via semaphore and can proceed with cleanup
-4. No memory leaks occur (except for some "possibly lost" memory due to pthread thread-local storage, which is a known Valgrind false positive)
-5. The program terminates correctly after a death is detected
+3. The parent process is notified of the death via semaphore and actively terminates all child processes
+4. The parent process uses non-blocking waits to prevent hanging
+5. Process termination is more aggressive and reliable, using SIGKILL and waitpid
+6. No memory leaks occur (except for some "possibly lost" memory due to pthread thread-local storage, which is a known Valgrind false positive)
+7. The program reliably terminates after a death is detected, without any hanging issues
 
 ## Notes
 

@@ -34,13 +34,16 @@ void kill_all_pid(t_data *data, int last)
 {
   int i;
 
-  i = 1;
+  i = 0;
   if (!data || !data->pids)
     return ;
   while (i < last)
   {
     if (data->pids[i] > 0)
+    {
       kill(data->pids[i], SIGKILL);
+      waitpid(data->pids[i], NULL, 0);
+    }
     i++;
   }
 }

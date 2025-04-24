@@ -145,10 +145,27 @@ void philo_routine(t_philo *philo)
     }
 }
 
+void *parent_death_monitor(void *arg)
+{
+    t_data *data = (t_data *)arg;
+    
+    sem_wait(data->dead);
+    // Print a message to indicate death was detected by parent
+    printf("Parent detected death, terminating all philosophers\n");
+    fflush(stdout); // Ensure output is flushed
+    // Immediately kill all child processes when death is detected
+    kill_all_pid(data, data->nbr_of_philos);
+    // Set a flag to indicate to the parent that we should exit
+    data->full = 1; // Reusing the full flag as an exit indicator
+    return NULL; // Changed back to return NULL as we're using a flag now
+}
+
 void start_the_dinner(t_data *data)
 {
     pthread_t death_watcher;
     int i;
+    int status;
+    pid_t pid;
 
     i = 0;
     while (i < data->nbr_of_philos)
@@ -174,17 +191,35 @@ void start_the_dinner(t_data *data)
         kill_all_pid(data, data->nbr_of_philos);
         exit(EXIT_FAILURE);
     }
-    while (wait(NULL) > 0)
-        ;
-    pthread_join(death_watcher, NULL);
-    kill_all_pid(data, data->nbr_of_philos);
-}
-
-void *parent_death_monitor(void *arg)
-{
-    t_data *data = (t_data *)arg;
     
-    sem_wait(data->dead);
-    kill_all_pid(data, data->nbr_of_philos);
-    return NULL;
+    // Wait with timeout logic
+    while (1)
+    {
+        // Check if death was detected
+        if (data->full == 1)
+        {
+            break;
+        }
+        
+        // Try to wait for any child, but don't block
+        pid = waitpid(-1, &status, WNOHANG);
+        
+        // If no process status changed, sleep a short time
+        if (pid == 0)
+        {
+            usleep(1000); // Short sleep
+            continue;
+        }
+        
+        // If error or no more children, break
+        if (pid == -1)
+        {
+            break;
+        }
+    }
+    
+    // Final cleanup
+    pthread_cancel(death_watcher); // Cancel the monitor thread
+    pthread_join(death_watcher, NULL); // Wait for it to finish
+    kill_all_pid(data, data->nbr_of_philos); // Final safety check
 }
