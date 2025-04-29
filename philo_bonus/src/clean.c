@@ -23,43 +23,43 @@ void	wrong_nbr_of_arg(void)
 	exit(1);
 }
 
-void error_print(char *str, t_data *data)
+void	error_print(char *str, t_data *data)
 {
-  sem_wait(data->print);
-  perror(str);
-  sem_post(data->print);
+	sem_wait(data->print);
+	perror(str);
+	sem_post(data->print);
 }
 
-void kill_all_pid(t_data *data, int last)
+void	kill_all_pid(t_data *data, int last)
 {
-  int i;
+	int	i;
 
-  i = 0;
-  if (!data || !data->pids)
-    return ;
-  while (i < last)
-  {
-    if (data->pids[i] > 0)
-    {
-      kill(data->pids[i], SIGKILL);
-      waitpid(data->pids[i], NULL, 0);
-    }
-    i++;
-  }
+	i = 0;
+	if (!data || !data->pids)
+		return ;
+	while (i < last)
+	{
+		if (data->pids[i] > 0)
+		{
+			kill(data->pids[i], SIGKILL);
+			waitpid(data->pids[i], NULL, 0);
+		}
+		i++;
+	}
 }
 
-void clean(t_data *data)
+void	clean(t_data *data)
 {
-  sem_close(data->forks);
-  sem_close(data->eat);
-  sem_close(data->dead);
-  sem_close(data->print);
-  sem_unlink(SEM_FORKS);
-  sem_unlink(SEM_EAT);
-  sem_unlink(SEM_DEAD);
-  sem_unlink(SEM_PRINT);
-  if (data->philos)
-    free(data->philos);
-  if (data->pids)
-  free(data->pids);
+	sem_close(data->forks);
+	sem_close(data->eat);
+	sem_close(data->dead);
+	sem_close(data->print);
+	sem_unlink(SEM_FORKS);
+	sem_unlink(SEM_EAT);
+	sem_unlink(SEM_DEAD);
+	sem_unlink(SEM_PRINT);
+	if (data->philos)
+		free(data->philos);
+	if (data->pids)
+		free(data->pids);
 }

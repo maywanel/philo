@@ -12,18 +12,15 @@
 
 #include "philo_bonus.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-    t_data data;
+	t_data	data;
 
-    memset(&data, 0, sizeof(t_data));
-    
-    if (argc < 5 || argc > 6)
-        wrong_nbr_of_arg();
-        
-    init_data(&data, argc, argv);
-    start_the_dinner(&data);
-    clean(&data);
-    
-    return 0;
+	memset(&data, 0, sizeof(t_data));
+	if (argc < 5 || argc > 6)
+		wrong_nbr_of_arg();
+	init_data(&data, argc, argv);
+	start_the_dinner(&data);
+	clean(&data);
+	return (0);
 }
