@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/29 08:50:19 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:52:42 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
 # define DIED "died"
+
+# define MAX_PHILO 200
 
 typedef struct s_philo	t_philo;
 
@@ -99,5 +101,6 @@ void					kill_all_pid(t_data *data, int last);
 void					clean(t_data *data);
 
 char					*valid_input(char *str);
+void					print_error(char *str);
 
 #endif

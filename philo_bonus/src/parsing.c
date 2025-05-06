@@ -6,11 +6,21 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:43:25 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/14 03:30:34 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:53:20 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+
+void	print_error(char *str)
+{
+	while (*str)
+	{
+		write(2, str, 1);
+		str++;
+	}
+	exit(EXIT_FAILURE);
+}
 
 char	*valid_input(char *str)
 {
@@ -22,18 +32,18 @@ char	*valid_input(char *str)
 	while (*str == 32 || (*str >= 8 && *str <= 13))
 		str++;
 	if (*str == '-')
-		error_print("only positive numbers\n", NULL);
+		print_error("only positive numbers\n");
 	else if (*str == '+')
 		str++;
 	if (!ft_isdigit(*str))
 	{
-		printf("%s", str);
-		error_print(" not a number\n", NULL);
+		ft_printf("%s", str);
+		print_error(" not numeric\n");
 	}
 	nbr = str;
 	while (ft_isdigit(*str++))
 		l++;
 	if (l > 10 && ft_atoi(nbr) < 0)
-		error_print("number is too high\n", NULL);
+		print_error("number is too high\n");
 	return (nbr);
 }

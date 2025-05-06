@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:51:24 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/29 18:38:54 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:54:19 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	init_data(t_data *data, char **av)
 {
 	data->philo_nbr = ft_atol(av[1]);
 	if (data->philo_nbr > MAX_PHILO)
-		error_exit("200 philo at MAX\n");
+		error_exit("200 philo at maximum\n");
 	else if (data->philo_nbr == 0)
 		error_exit("need at least 1 philo\n");
 	data->time_to_die = ft_atol(av[2]);

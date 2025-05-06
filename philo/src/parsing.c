@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:42:29 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/15 02:45:12 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:53:31 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*valid_input(char *str)
 	if (!ft_isdigit(*str))
 	{
 		ft_printf("%s", str);
-		error_exit(" not a number\n");
+		error_exit(" numeric\n");
 	}
 	nbr = str;
 	while (ft_isdigit(*str++))

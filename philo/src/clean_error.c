@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:37:14 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/03/15 03:30:44 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:38:43 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	error_exit(char *s)
 
 void	wrong_nbr_of_arg(void)
 {
-	ft_printf("USAGE: ./philo");
+	ft_printf("usage: ./philo");
 	ft_printf(" number_of_philosophers");
 	ft_printf(" time_to_die");
 	ft_printf(" time_to_eat");

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 01:10:41 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/05 02:12:17 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:24:17 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 # include <sys/time.h>
 
-# define MAX_PHILO 2000
+# define MAX_PHILO 200
 # define FORK " has taken a fork\n"
 # define EAT " is eating\n"
 # define SLEEP " is sleeping\n"

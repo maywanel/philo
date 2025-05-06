@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:20:58 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/29 08:46:16 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:54:34 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,16 @@ void	init_data(t_data *data, int argc, char **argv)
 	data->time_to_die = ft_atol(argv[2]);
 	data->time_to_eat = ft_atol(argv[3]);
 	data->time_to_sleep = ft_atol(argv[4]);
+	if (data->nbr_of_philos > MAX_PHILO)
+	{
+		perror("200 philosophers at maximum");
+		exit(EXIT_FAILURE);
+	}
+	if (data->nbr_of_philos < 1)
+	{
+		perror("number of philosophers is too low");
+		exit(EXIT_FAILURE);
+	}
 	if (argc == 6)
 		data->nbr_of_meals = ft_atol(argv[5]);
 	else
