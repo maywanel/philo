@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:42:52 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/06 16:53:36 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:37:53 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ long	ft_atol(char *str)
 	while (ft_isdigit(str[i]))
 	{
 		num = (num * 10) + (str[i] - 48);
+		if (num > 2147483647)
+			error_exit("number is too high\n");
 		i++;
 	}
 	if (str[i] != '\0')
@@ -57,6 +59,6 @@ void	philo_sleep(t_data *data, long milliseconds)
 		test = get_current_time() - start;
 		if (test >= milliseconds)
 			break ;
-		usleep(1);
+		usleep(200);
 	}
 }

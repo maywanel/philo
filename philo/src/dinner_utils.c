@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/11 18:19:01 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:58:46 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	think_routine(t_philo *philo, bool silent)
 	if (time_to_think + philo->eat_time >= philo->die_time)
 		time_to_think = 0;
 	if (time_to_think > 600)
-		time_to_think = 200;
+		time_to_think = 500;
 	if (silent == false)
 		print_status(philo, THINK);
 	philo_sleep(philo->data, time_to_think);

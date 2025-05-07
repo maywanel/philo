@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 18:00:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/09 18:30:34 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:23:53 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 static void	eat_sleep_routine(t_philo *philo)
 {
 	acquire_forks(philo);
+	if (philo->data->end)
+    {
+        pthread_mutex_unlock(&(philo->left_fork->fork));
+        pthread_mutex_unlock(&(philo->right_fork->fork));
+        return;
+    }
 	print_status(philo, EAT);
 	pthread_mutex_lock(&(philo->data->die_time_mtx));
 	philo->last_meal = get_current_time();
@@ -49,7 +55,7 @@ void	*philosopher_routine(void *phi)
 	if (philo->data->philo_nbr == 1)
 		return (lone_philo_routine(philo));
 	else if (!(philo->id % 2))
-		think_routine(philo, true);
+		usleep(500);
 	while (!philo->data->end)
 	{
 		eat_sleep_routine(philo);
@@ -65,7 +71,7 @@ static int	check_philosopher_death(t_data *data, int i)
 
 	pthread_mutex_lock(&data->die_time_mtx);
 	time_since_last_meal = get_current_time() - data->philos[i].last_meal;
-	if (time_since_last_meal >= (long)data->philos[i].die_time
+	if (time_since_last_meal > (long)data->philos[i].die_time
 		|| data->philos[i].death)
 	{
 		pthread_mutex_unlock(&data->die_time_mtx);
@@ -92,7 +98,7 @@ void	*monitor_routine(void *data_ptr)
 				return (NULL);
 			i++;
 		}
-		usleep(50);
+		usleep(500);
 	}
 	return (NULL);
 }
