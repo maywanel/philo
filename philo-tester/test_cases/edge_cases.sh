@@ -63,7 +63,7 @@ run_edge_test "Large number of philosophers" 201 800 200 200 "should_error"
 run_edge_test "Extremely short times" 5 60 60 60 "should_handle"
 
 # Test case 6: High time values
-run_edge_test "High time values" 5 9999 9999 9999 "should_handle"
+run_edge_test "High time values" 5 9999000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 9999 9999 "should_error"
 
 # Test case 7: Negative time values (should reject)
 run_edge_test "Negative time values" 5 -800 -200 -200 "should_error"
@@ -77,7 +77,7 @@ if [ -f "$PHILO_BONUS_PATH" ]; then
     run_edge_test "BONUS: Negative philosopher count" -5 800 200 200 "should_error" "$PHILO_BONUS_PATH"
     run_edge_test "BONUS: Large number of philosophers" 201 800 200 200 "should_error" "$PHILO_BONUS_PATH"
     run_edge_test "BONUS: Extremely short times" 5 60 60 60 "should_handle" "$PHILO_BONUS_PATH"
-    run_edge_test "BONUS: High time values" 5 9999 9999 9999 "should_handle" "$PHILO_BONUS_PATH"
+    run_edge_test "BONUS: High time values" 5 9999000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 9999 9999 "should_error" "$PHILO_BONUS_PATH"
     run_edge_test "BONUS: Negative time values" 5 -800 -200 -200 "should_error" "$PHILO_BONUS_PATH"
 fi
 

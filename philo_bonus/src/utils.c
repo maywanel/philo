@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:44:43 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/06 16:53:26 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:37:59 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ long	ft_atol(char *str)
 	while (ft_isdigit(str[i]))
 	{
 		num = (num * 10) + (str[i] - 48);
+		if (num > 2147483647)
+			(print_error("number is too large\n"), exit(1));
 		i++;
 	}
 	if (str[i] != '\0')

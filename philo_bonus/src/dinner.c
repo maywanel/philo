@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:18:51 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/29 08:49:44 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:34:26 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*death_monitor(void *arg)
 		sem_wait(philo->data->eat);
 		time_since_last_meal = current_time - philo->last_meal;
 		sem_post(philo->data->eat);
-		if (time_since_last_meal >= philo->data->time_to_die)
+		if (time_since_last_meal > philo->data->time_to_die)
 		{
 			sem_wait(philo->data->print);
 			printf("%ld %d %s\n", get_current_time() - philo->data->start_time,
