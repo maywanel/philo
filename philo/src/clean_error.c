@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:37:14 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/06 16:38:43 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/10 21:23:53 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ void	clean(t_data *data)
 		pthread_mutex_destroy(&data->forks[i].fork);
 		i++;
 	}
-	pthread_mutex_destroy(&data->print);
-	pthread_mutex_destroy(&data->die_time_mtx);
-	pthread_mutex_destroy(&data->death_check);
-	pthread_mutex_destroy(&data->meal_check);
+	pthread_mutex_destroy(&data->mtx);
 	free(data->philos);
 	free(data->forks);
 }

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/07 10:58:46 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/10 21:19:16 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,22 @@
 
 void	set_simulation_end(t_data *data)
 {
-	pthread_mutex_lock(&data->death_check);
+	pthread_mutex_lock(&data->mtx);
 	data->end = true;
-	pthread_mutex_unlock(&data->death_check);
+	pthread_mutex_unlock(&data->mtx);
 }
 
 void	print_status(t_philo *philo, char *status)
 {
 	long	current_time;
 
-	if (philo->data->end)
-		return ;
-	pthread_mutex_lock(&philo->data->print);
+	pthread_mutex_lock(&philo->data->mtx);
 	if (!philo->data->end)
 	{
 		current_time = get_current_time() - philo->data->start_time;
 		ft_printf("%d %d%s", current_time, philo->id, status);
 	}
-	pthread_mutex_unlock(&philo->data->print);
+	pthread_mutex_unlock(&philo->data->mtx);
 }
 
 void	*lone_philo_routine(t_philo *philo)
@@ -51,9 +49,9 @@ void	handle_nbr_of_meals(t_philo *philo)
 	if (philo->data->nbr_of_meals != -1
 		&& philo->meal_c >= philo->data->nbr_of_meals)
 	{
-		pthread_mutex_lock(&philo->data->meal_check);
+		pthread_mutex_lock(&philo->data->mtx);
 		philo->data->full_philos++;
-		pthread_mutex_unlock(&philo->data->meal_check);
+		pthread_mutex_unlock(&philo->data->mtx);
 		if (philo->data->full_philos == philo->data->philo_nbr)
 			set_simulation_end(philo->data);
 	}
@@ -63,10 +61,10 @@ void	think_routine(t_philo *philo, bool silent)
 {
 	long	time_to_think;
 
-	pthread_mutex_lock(&philo->data->die_time_mtx);
+	pthread_mutex_lock(&philo->data->mtx);
 	time_to_think = (philo->die_time - (get_current_time() - philo->last_meal)
 			- philo->eat_time) / 2;
-	pthread_mutex_unlock(&philo->data->die_time_mtx);
+	pthread_mutex_unlock(&philo->data->mtx);
 	if (time_to_think < 0)
 		time_to_think = 0;
 	if (time_to_think + philo->eat_time >= philo->die_time)

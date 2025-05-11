@@ -15,7 +15,7 @@ RED      = \033[0;31m
 SUCCESS 	=	[$(GREEN)SUCCESS$(RESET)]
 _INFO		=	[$(YELLOW)INFO$(RESET)]
 
-all: make_libft $(NAME) clean
+all: make_libft $(NAME)
 
 $(NAME): philo.c $(LIB) $(OBJ)
 	@$(CC) philo.c -o $(NAME) $(OBJ) $(LDFLAGS)

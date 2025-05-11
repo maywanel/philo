@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:42:52 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/07 11:37:53 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/10 21:11:09 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	philo_sleep(t_data *data, long milliseconds)
 	long	start;
 	long	test;
 
+	pthread_mutex_lock(&data->mtx);
 	start = get_current_time();
 	while (!data->end)
 	{
@@ -61,4 +62,5 @@ void	philo_sleep(t_data *data, long milliseconds)
 			break ;
 		usleep(200);
 	}
+	pthread_mutex_unlock(&data->mtx);
 }

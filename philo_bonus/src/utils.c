@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:44:43 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/07 11:37:59 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:27:01 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,16 @@ void	philo_sleep(t_data *data, long time)
 		current = get_current_time();
 		elapsed = current - start;
 	}
+}
+
+void	init_args(t_data *data, char **argv)
+{
+	data->nbr_of_philos = ft_atol(argv[1]);
+	data->time_to_die = ft_atol(argv[2]);
+	data->time_to_eat = ft_atol(argv[3]);
+	data->time_to_sleep = ft_atol(argv[4]);
+	if (argv[5])
+		data->nbr_of_meals = ft_atol(argv[5]);
+	else
+		data->nbr_of_meals = -1;
 }

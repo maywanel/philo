@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/06 16:52:42 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:26:13 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void					philo_sleep(t_data *data, long time);
 /* Init */
 void					init_philo(t_philo *philo, int id, t_data *data);
 void					init_philos(t_philo *philos, t_data *data);
-void					init_data(t_data *data, int argc, char **argv);
+void					init_data(t_data *data, char **argv);
 
 /* Dinner */
 void					eat_sleep_routine(t_philo *philo);
@@ -102,5 +102,6 @@ void					clean(t_data *data);
 
 char					*valid_input(char *str);
 void					print_error(char *str);
+void					init_args(t_data *data, char **argv);
 
 #endif

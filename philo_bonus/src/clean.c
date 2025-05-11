@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:34:40 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/06 16:39:02 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:18:14 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	wrong_nbr_of_arg(void)
 void	error_print(char *str, t_data *data)
 {
 	sem_wait(data->print);
-	perror(str);
+	print_error(str);
+	print_error("\n");
 	sem_post(data->print);
 }
 

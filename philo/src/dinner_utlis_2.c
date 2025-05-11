@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:46:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/05 19:53:44 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/11 13:48:16 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,19 @@ void	create_threads(t_data *data, pthread_t *monitor)
 	}
 	if (pthread_create(monitor, NULL, monitor_routine, data) != 0)
 		error_exit("Failed to create monitor thread\n");
+}
+
+int	start_the_routine(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->mtx);
+	if (philo->data->end)
+	{
+		pthread_mutex_unlock(&philo->data->mtx);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->mtx);
+	eat_sleep_routine(philo);
+	handle_nbr_of_meals(philo);
+	think_routine(philo, false);
+	return (0);
 }

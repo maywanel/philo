@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:56:45 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/09 18:36:18 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:25:56 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 	memset(&data, 0, sizeof(t_data));
 	if (argc < 5 || argc > 6)
 		wrong_nbr_of_arg();
-	init_data(&data, argc, argv);
+	init_data(&data, argv);
 	start_the_dinner(&data);
 	clean(&data);
 	return (0);

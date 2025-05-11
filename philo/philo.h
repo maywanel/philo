@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 01:10:41 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/06 16:24:17 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/11 13:49:59 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,7 @@ struct					s_data
 	bool				end;
 	t_fork				*forks;
 	t_philo				*philos;
-	pthread_mutex_t		print;
-	pthread_mutex_t		die_time_mtx;
-	pthread_mutex_t		death_check;
-	pthread_mutex_t		meal_check;
+	pthread_mutex_t		mtx;
 	int					full_philos;
 };
 
@@ -90,5 +87,7 @@ void					handle_nbr_of_meals(t_philo *philo);
 void					set_simulation_end(t_data *data);
 void					*lone_philo_routine(t_philo *philo);
 void					init_dinner(t_data *data);
+int						start_the_routine(t_philo *philo);
+void					eat_sleep_routine(t_philo *philo);
 
 #endif

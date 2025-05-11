@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:51:24 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/06 16:54:19 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/10 20:53:31 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ void	init_data(t_data *data, char **av)
 	if (!data->forks)
 		(free(data->philos), error_exit("MALLOC FAILED\n"));
 	data->start_time = get_current_time();
-	pthread_mutex_init(&data->print, NULL);
-	pthread_mutex_init(&data->die_time_mtx, NULL);
-	pthread_mutex_init(&data->death_check, NULL);
-	pthread_mutex_init(&data->meal_check, NULL);
+	pthread_mutex_init(&data->mtx, NULL);
 	init_philos(data);
 }
 
