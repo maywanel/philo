@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:44:31 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/04/29 08:45:12 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/12 09:22:16 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void	*parent_death_monitor(void *arg)
 
 	data = (t_data *)arg;
 	sem_wait(data->dead);
-	kill_all_pid(data, data->nbr_of_philos);
+	sem_wait(data->full_sem);
 	data->full = 1;
+	sem_post(data->full_sem);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/10 21:19:16 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 08:40:57 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,15 @@ void	print_status(t_philo *philo, char *status)
 {
 	long	current_time;
 
-	pthread_mutex_lock(&philo->data->mtx);
+	if (philo->data->end)
+		return ;
+	pthread_mutex_lock(&philo->data->print);
 	if (!philo->data->end)
 	{
 		current_time = get_current_time() - philo->data->start_time;
-		ft_printf("%d %d%s", current_time, philo->id, status);
+		printf("%ld %d%s", current_time, philo->id, status);
 	}
-	pthread_mutex_unlock(&philo->data->mtx);
+	pthread_mutex_unlock(&philo->data->print);
 }
 
 void	*lone_philo_routine(t_philo *philo)

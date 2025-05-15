@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:42:52 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/10 21:11:09 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 08:42:51 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ long	ft_atol(char *str)
 	num = 0;
 	i = 0;
 	str = valid_input(str);
+	if (!str)
+		return (-1);
 	while (ft_isdigit(str[i]))
 	{
 		num = (num * 10) + (str[i] - 48);
 		if (num > 2147483647)
-			error_exit("number is too high\n");
+			return (write(2, " is too high\n", 14), -1);
 		i++;
 	}
 	if (str[i] != '\0')
@@ -32,10 +34,7 @@ long	ft_atol(char *str)
 		if (str[i] == ' ' || str[i] == '\n' || str[i] == '\t')
 			return (num);
 		else
-		{
-			ft_printf("%s", str);
-			error_exit(" numeric\n");
-		}
+			return (write(2, "only numeric\n", 14), -1);
 	}
 	return (num);
 }
@@ -52,15 +51,44 @@ void	philo_sleep(t_data *data, long milliseconds)
 {
 	long	start;
 	long	test;
+	bool	simulation_ended;
 
-	pthread_mutex_lock(&data->mtx);
 	start = get_current_time();
-	while (!data->end)
+	while (1)
 	{
 		test = get_current_time() - start;
 		if (test >= milliseconds)
 			break ;
+		pthread_mutex_lock(&data->mtx);
+		simulation_ended = data->end;
+		pthread_mutex_unlock(&data->mtx);
+		if (simulation_ended)
+			break ;
 		usleep(200);
 	}
-	pthread_mutex_unlock(&data->mtx);
+}
+
+int	ft_atoi(const char *str)
+{
+	int	i;
+	int	sign;
+	int	result;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-')
+		sign = -1;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] >= '0' && str[i] <= '9')
+		result = result * 10 + (str[i++] - '0');
+	return (sign * result);
+}
+
+int	ft_isdigit(int c)
+{
+	return (c >= 48 && c <= 57);
 }

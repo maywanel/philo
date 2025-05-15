@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   init_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 02:27:26 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 09:05:19 by moel-mes         ###   ########.fr       */
+/*   Created: 2025/05/12 09:35:12 by moel-mes          #+#    #+#             */
+/*   Updated: 2025/05/12 09:35:34 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-int	main(int ac, char **av)
+void	init_philo(t_philo *philo, int id, t_data *data)
 {
-	t_data	data;
+	philo->id = id;
+	philo->data = data;
+	philo->meal_c = 0;
+	philo->last_meal = 0;
+	philo->death = 0;
+	philo->pid = 0;
+}
 
-	if (ac < 5 || ac > 6)
-		wrong_nbr_of_arg();
-	else
+void	init_philos(t_philo *philos, t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nbr_of_philos)
 	{
-		if (!init_data(&data, av))
-		{
-			start_the_dinner(&data);
-			clean(&data);
-		}
+		init_philo(&philos[i], i + 1, data);
+		i++;
 	}
 }

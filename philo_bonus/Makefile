@@ -1,6 +1,5 @@
 CC			=	cc
 CFLAGS 		= 	-Wall -Werror -Wextra -g -I./
-LDFLAGS 	= 	-L../libft -lft
 RM			=	rm -rf
 FILES		=	${wildcard src/*.c}
 OBJ			=	$(FILES:.c=.o)
@@ -15,28 +14,22 @@ RED      = \033[0;31m
 SUCCESS 	=	[$(GREEN)SUCCESS$(RESET)]
 _INFO		=	[$(YELLOW)INFO$(RESET)]
 
-all: make_libft $(NAME)
+all: $(NAME)
 
 $(NAME): philo_bonus.c $(LIB) $(OBJ)
-	@$(CC) philo_bonus.c -o $(NAME) $(OBJ) $(LDFLAGS)
+	@$(CC) philo_bonus.c -o $(NAME) $(OBJ)
 	@printf "$(SUCCESS) $(BLUE)philo ready\n"
 
-make_libft:
-	@make --no-print-directory -C ../libft all;
-
 clean:
-	@make --no-print-directory -C ../libft clean;
 	@$(RM) $(OBJ)
 
 fclean: clean
-	@make --no-print-directory -C ../libft fclean;
 	@$(RM) $(NAME)
 	@printf "$(_INFO) $(RED)philo is cleaned$(RESET)\n"
 
-re: fclean libft_re all
+bonus: all
 
-libft_re:
-	@make --no-print-directory -C ../libft re;
+re: fclean all
 
-.PHONY: re clean fclean bonus all make_libft libft_re
+.PHONY: re clean fclean all
 .SILENT: $(OBJ)

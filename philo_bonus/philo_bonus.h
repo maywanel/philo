@@ -6,14 +6,13 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/09 18:26:13 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:12:13 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_BONUS_H
 # define PHILO_BONUS_H
 
-# include "../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <pthread.h>
@@ -31,6 +30,7 @@
 # define SEM_EAT "/sem_eat"
 # define SEM_DEAD "/sem_dead"
 # define SEM_PRINT "/sem_print"
+# define SEM_FULL "/sem_full"
 
 # define FORK "has taken a fork"
 # define EAT "is eating"
@@ -55,6 +55,7 @@ typedef struct s_data
 	sem_t				*eat;
 	sem_t				*dead;
 	sem_t				*print;
+	sem_t				*full_sem;
 	t_philo				*philos;
 	pid_t				*pids;
 }						t_data;
@@ -69,18 +70,13 @@ typedef struct s_philo
 	t_data				*data;
 }						t_philo;
 
-/* Utils */
 long					ft_atol(char *str);
 void					print_status(t_philo *philo, char *status);
 long					get_current_time(void);
 void					philo_sleep(t_data *data, long time);
-
-/* Init */
 void					init_philo(t_philo *philo, int id, t_data *data);
 void					init_philos(t_philo *philos, t_data *data);
 void					init_data(t_data *data, char **argv);
-
-/* Dinner */
 void					eat_sleep_routine(t_philo *philo);
 void					*death_monitor(void *arg);
 void					philo_routine(t_philo *philo);
@@ -93,15 +89,15 @@ void					*parent_death_monitor(void *arg);
 void					philo_main_loop(t_philo *philo);
 int						start_philo_process(t_data *data, int i);
 void					monitor_dinner(t_data *data, pthread_t *death_watcher);
-
-/* Clean */
 void					wrong_nbr_of_arg(void);
 void					error_print(char *str, t_data *data);
 void					kill_all_pid(t_data *data, int last);
 void					clean(t_data *data);
-
 char					*valid_input(char *str);
 void					print_error(char *str);
 void					init_args(t_data *data, char **argv);
+int						ft_isdigit(int c);
+int						ft_atoi(const char *str);
+int						ft_strncmp(const char *s1, const char *s2, size_t n);
 
 #endif

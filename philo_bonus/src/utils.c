@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:44:43 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/09 18:27:01 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:11:04 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ long	ft_atol(char *str)
 			return (num);
 		else
 		{
-			ft_printf("%s", str);
+			printf("%s", str);
 			print_error(" not numeric\n");
 		}
 	}

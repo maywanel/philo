@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:46:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/11 13:48:16 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 08:30:47 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,7 @@ void	acquire_forks(t_philo *philo)
 	}
 }
 
-void	init_dinner(t_data *data)
-{
-	int	i;
-
-	data->start_time = get_current_time();
-	data->end = false;
-	data->full_philos = 0;
-	i = 0;
-	while (i < data->philo_nbr)
-	{
-		data->philos[i].last_meal = data->start_time;
-		data->philos[i].meal_c = 0;
-		i++;
-	}
-}
-
-void	create_threads(t_data *data, pthread_t *monitor)
+int	create_threads(t_data *data, pthread_t *monitor)
 {
 	int	i;
 
@@ -55,24 +39,20 @@ void	create_threads(t_data *data, pthread_t *monitor)
 	{
 		if (pthread_create(&data->philos[i].thread_id, NULL,
 				philosopher_routine, &data->philos[i]) != 0)
-			error_exit("Failed to create thread\n");
+			return (write(2, "Failed to create thread\n", 25));
 		i++;
 	}
 	if (pthread_create(monitor, NULL, monitor_routine, data) != 0)
-		error_exit("Failed to create monitor thread\n");
+		return (write(2, "Failed to create monitor thread\n", 33));
+	return (0);
 }
 
-int	start_the_routine(t_philo *philo)
+void	check_routine(t_philo *philo, bool *simulation_ended)
 {
-	pthread_mutex_lock(&philo->data->mtx);
-	if (philo->data->end)
-	{
-		pthread_mutex_unlock(&philo->data->mtx);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->data->mtx);
 	eat_sleep_routine(philo);
 	handle_nbr_of_meals(philo);
 	think_routine(philo, false);
-	return (0);
+	pthread_mutex_lock(&philo->data->mtx);
+	*simulation_ended = philo->data->end;
+	pthread_mutex_unlock(&philo->data->mtx);
 }

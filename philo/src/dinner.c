@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 18:00:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/11 13:52:36 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 08:31:22 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ void	eat_sleep_routine(t_philo *philo)
 	print_status(philo, SLEEP);
 	pthread_mutex_unlock(&(philo->left_fork->fork));
 	pthread_mutex_unlock(&(philo->right_fork->fork));
-	usleep(300);
 	philo_sleep(philo->data, philo->sleep_time);
 }
 
 void	*philosopher_routine(void *phi)
 {
 	t_philo	*philo;
+	bool	simulation_ended;
 
 	philo = (t_philo *)phi;
 	if (philo->data->nbr_of_meals == 0)
@@ -57,9 +57,9 @@ void	*philosopher_routine(void *phi)
 		return (lone_philo_routine(philo));
 	else if (!(philo->id % 2))
 		usleep(500);
-	while (!philo->data->end)
-		if (start_the_routine(philo))
-			break ;
+	simulation_ended = false;
+	while (!simulation_ended)
+		check_routine(philo, &simulation_ended);
 	return (NULL);
 }
 
@@ -73,8 +73,8 @@ static int	check_philosopher_death(t_data *data, int i)
 		|| data->philos[i].death)
 	{
 		pthread_mutex_unlock(&data->mtx);
-		set_simulation_end(data);
 		print_status(&data->philos[i], DIED);
+		set_simulation_end(data);
 		return (1);
 	}
 	pthread_mutex_unlock(&data->mtx);
@@ -85,9 +85,11 @@ void	*monitor_routine(void *data_ptr)
 {
 	t_data	*data;
 	int		i;
+	bool	simulation_ended;
 
 	data = (t_data *)data_ptr;
-	while (!data->end)
+	simulation_ended = false;
+	while (!simulation_ended)
 	{
 		i = 0;
 		while (i < data->philo_nbr)
@@ -96,25 +98,30 @@ void	*monitor_routine(void *data_ptr)
 				return (NULL);
 			i++;
 		}
+		pthread_mutex_lock(&data->mtx);
+		simulation_ended = data->end;
+		pthread_mutex_unlock(&data->mtx);
 		usleep(500);
 	}
 	return (NULL);
 }
 
-void	start_the_dinner(t_data *data)
+int	start_the_dinner(t_data *data)
 {
 	int			i;
 	pthread_t	monitor;
 
 	init_dinner(data);
-	create_threads(data, &monitor);
+	if (create_threads(data, &monitor))
+		return (1);
 	i = 0;
 	while (i < data->philo_nbr)
 	{
 		if (pthread_join(data->philos[i].thread_id, NULL) != 0)
-			error_exit("Failed to join thread\n");
+			return (write(2, "Failed to join thread\n", 23));
 		i++;
 	}
 	if (pthread_join(monitor, NULL) != 0)
-		error_exit("Failed to join monitor thread\n");
+		return (write(2, "Failed to join monitor thread\n", 31));
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:34:40 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/09 18:18:14 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:11:04 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	wrong_nbr_of_arg(void)
 {
-	ft_printf("usage: ./philo");
-	ft_printf(" number_of_philosophers");
-	ft_printf(" time_to_die");
-	ft_printf(" time_to_eat");
-	ft_printf(" time_to_sleep");
-	ft_printf(" [number_of_times_each_philosopher_must_eat]\n");
+	printf("usage: ./philo");
+	printf(" number_of_philosophers");
+	printf(" time_to_die");
+	printf(" time_to_eat");
+	printf(" time_to_sleep");
+	printf(" [number_of_times_each_philosopher_must_eat]\n");
 	exit(1);
 }
 
@@ -55,10 +55,12 @@ void	clean(t_data *data)
 	sem_close(data->eat);
 	sem_close(data->dead);
 	sem_close(data->print);
+	sem_close(data->full_sem);
 	sem_unlink(SEM_FORKS);
 	sem_unlink(SEM_EAT);
 	sem_unlink(SEM_DEAD);
 	sem_unlink(SEM_PRINT);
+	sem_unlink(SEM_FULL);
 	if (data->philos)
 		free(data->philos);
 	if (data->pids)
