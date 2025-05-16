@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:18:51 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/07 11:34:26 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 23:00:40 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "../philo_bonus.h"
 
 void	lone_philo_routine(t_philo *philo)
 {
@@ -19,7 +19,6 @@ void	lone_philo_routine(t_philo *philo)
 	sem_wait(philo->data->print);
 	printf("%ld %d %s\n", get_current_time() - philo->data->start_time,
 		philo->id, DIED);
-	sem_post(philo->data->dead);
 	exit(1);
 }
 
@@ -41,7 +40,6 @@ void	*death_monitor(void *arg)
 			sem_wait(philo->data->print);
 			printf("%ld %d %s\n", get_current_time() - philo->data->start_time,
 				philo->id, DIED);
-			sem_post(philo->data->dead);
 			exit(1);
 		}
 		usleep(1000);
@@ -77,7 +75,6 @@ void	philo_routine(t_philo *philo)
 
 void	start_the_dinner(t_data *data)
 {
-	pthread_t	death_watcher;
 	int			i;
 
 	i = 0;
@@ -88,7 +85,7 @@ void	start_the_dinner(t_data *data)
 		i++;
 		usleep(100);
 	}
-	monitor_dinner(data, &death_watcher);
+	monitor_dinner(data);
 }
 
 int	start_philo_process(t_data *data, int i)

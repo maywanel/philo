@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 18:00:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 08:31:22 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:25:15 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 void	eat_sleep_routine(t_philo *philo)
 {

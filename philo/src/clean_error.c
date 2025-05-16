@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 01:37:14 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 08:50:35 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:25:01 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 void	wrong_nbr_of_arg(void)
 {

@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:44:31 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/12 09:22:16 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 23:11:02 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "../philo_bonus.h"
 
 void	think_routine(t_philo *philo, bool silent)
 {
@@ -34,12 +34,10 @@ void	check_number_meals(t_philo *philo)
 	sem_wait(philo->data->eat);
 	if (philo->meal_c >= philo->data->nbr_of_meals
 		&& philo->data->nbr_of_meals != -1)
-	{
-		sem_post(philo->data->dead);
-		clean(philo->data);
-		philo->death = 1;
-	}
+		philo->data->full++;
 	sem_post(philo->data->eat);
+	if (philo->data->full == philo->data->nbr_of_philos)
+		exit(0);
 }
 
 void	grab_forks(t_philo *philo)
@@ -74,14 +72,3 @@ void	eat_sleep_routine(t_philo *philo)
 	philo_sleep(philo->data, philo->data->time_to_sleep);
 }
 
-void	*parent_death_monitor(void *arg)
-{
-	t_data	*data;
-
-	data = (t_data *)arg;
-	sem_wait(data->dead);
-	sem_wait(data->full_sem);
-	data->full = 1;
-	sem_post(data->full_sem);
-	return (NULL);
-}

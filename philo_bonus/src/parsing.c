@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:43:25 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 09:11:04 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:51:56 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "../philo_bonus.h"
 
 void	print_error(char *str)
 {

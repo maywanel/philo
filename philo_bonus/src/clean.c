@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:34:40 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 09:11:04 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:58:11 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "../philo_bonus.h"
 
 void	wrong_nbr_of_arg(void)
 {
@@ -53,14 +53,10 @@ void	clean(t_data *data)
 {
 	sem_close(data->forks);
 	sem_close(data->eat);
-	sem_close(data->dead);
 	sem_close(data->print);
-	sem_close(data->full_sem);
 	sem_unlink(SEM_FORKS);
 	sem_unlink(SEM_EAT);
-	sem_unlink(SEM_DEAD);
 	sem_unlink(SEM_PRINT);
-	sem_unlink(SEM_FULL);
 	if (data->philos)
 		free(data->philos);
 	if (data->pids)

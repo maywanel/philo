@@ -1,35 +1,27 @@
-CC			=	cc
-CFLAGS 		= 	-Wall -Werror -Wextra -g -I./
-RM			=	rm -rf
-FILES		=	${wildcard src/*.c}
-OBJ			=	$(FILES:.c=.o)
-NAME 		= philo_bonus
-LIB			=	philo_bonus.h
+NAME = philo_bonus
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g3 -pthread -fsanitize=address
 
-GREEN		=	\e[38;5;118m
-YELLOW		=	\e[38;5;226m
-RESET		=	\e[0m
-BLUE		=	\033[1;34m
-RED      = \033[0;31m
-SUCCESS 	=	[$(GREEN)SUCCESS$(RESET)]
-_INFO		=	[$(YELLOW)INFO$(RESET)]
+SRCS = src/clean.c src/dinner.c src/dinner_utils2.c src/dinner_utils.c \
+	src/init.c src/init_utils.c src/parsing.c src/utils2.c src/utils.c \
+	philo_bonus.c
+
+OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): philo_bonus.c $(LIB) $(OBJ)
-	@$(CC) philo_bonus.c -o $(NAME) $(OBJ)
-	@printf "$(SUCCESS) $(BLUE)philo ready\n"
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@$(RM) $(OBJ)
+	rm -rf $(OBJS)
 
-fclean: clean
-	@$(RM) $(NAME)
-	@printf "$(_INFO) $(RED)philo is cleaned$(RESET)\n"
-
-bonus: all
+fclean:
+	rm -rf $(OBJS) $(NAME)
 
 re: fclean all
 
-.PHONY: re clean fclean all
-.SILENT: $(OBJ)
+.PHONY: all clean fclean re

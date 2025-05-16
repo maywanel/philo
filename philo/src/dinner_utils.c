@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 08:40:57 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:49:21 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 void	set_simulation_end(t_data *data)
 {
@@ -22,9 +22,13 @@ void	set_simulation_end(t_data *data)
 void	print_status(t_philo *philo, char *status)
 {
 	long	current_time;
-
+	
+	pthread_mutex_lock(&philo->data->mtx);
 	if (philo->data->end)
+	{
+		pthread_mutex_unlock(&philo->data->mtx);
 		return ;
+	}
 	pthread_mutex_lock(&philo->data->print);
 	if (!philo->data->end)
 	{
@@ -32,6 +36,7 @@ void	print_status(t_philo *philo, char *status)
 		printf("%ld %d%s", current_time, philo->id, status);
 	}
 	pthread_mutex_unlock(&philo->data->print);
+	pthread_mutex_unlock(&philo->data->mtx);
 }
 
 void	*lone_philo_routine(t_philo *philo)
@@ -41,7 +46,10 @@ void	*lone_philo_routine(t_philo *philo)
 	philo_sleep(philo->data, philo->die_time);
 	print_status(philo, DIED);
 	philo->death = true;
-	set_simulation_end(philo->data);
+	// set_simulation_end(philo->data);
+	pthread_mutex_lock(&philo->data->mtx);
+	philo->data->end = true;
+	pthread_mutex_unlock(&philo->data->mtx);
 	pthread_mutex_unlock(&(philo->right_fork->fork));
 	return (NULL);
 }
@@ -52,10 +60,12 @@ void	handle_nbr_of_meals(t_philo *philo)
 		&& philo->meal_c >= philo->data->nbr_of_meals)
 	{
 		pthread_mutex_lock(&philo->data->mtx);
-		philo->data->full_philos++;
+		if (philo->data->full_philos++ == philo->data->philo_nbr)
+		{
+			// set_simulation_end(philo->data);
+			philo->data->end = true;
+		}
 		pthread_mutex_unlock(&philo->data->mtx);
-		if (philo->data->full_philos == philo->data->philo_nbr)
-			set_simulation_end(philo->data);
 	}
 }
 

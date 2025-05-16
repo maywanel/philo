@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 09:35:12 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/12 09:35:34 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:51:56 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "../philo_bonus.h"
 
 void	init_philo(t_philo *philo, int id, t_data *data)
 {

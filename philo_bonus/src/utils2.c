@@ -6,11 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:07:46 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 09:12:01 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:51:56 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "../philo_bonus.h"
 
 int	ft_atoi(const char *str)
 {

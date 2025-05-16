@@ -6,17 +6,17 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 02:51:24 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 09:04:43 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/15 21:25:37 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 
 int	init_data(t_data *data, char **av)
 {
 	data->philo_nbr = ft_atol(av[1]);
 	if (data->philo_nbr > MAX_PHILO)
-		return (write(2, "200 philo at maximum\n", 24));
+		return (write(2, "200 philo at maximum\n", 22));
 	else if (data->philo_nbr == 0)
 		return (write(2, "need at least 1 philo\n", 22));
 	data->time_to_die = ft_atol(av[2]);
