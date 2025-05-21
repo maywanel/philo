@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 23:00:53 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:25:39 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_data
 	sem_t				*forks;
 	sem_t				*eat;
 	sem_t				*print;
+	sem_t				*meals_completed;
 	t_philo				*philos;
 	pid_t				*pids;
 }						t_data;
@@ -62,6 +63,7 @@ typedef struct s_philo
 	int					meal_c;
 	long				last_meal;
 	int					death;
+	bool				reported_full;
 	pid_t				pid;
 	t_data				*data;
 }						t_philo;

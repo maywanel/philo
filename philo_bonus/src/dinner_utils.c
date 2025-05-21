@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:44:31 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 23:11:02 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:10:32 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,16 @@ void	think_routine(t_philo *philo, bool silent)
 void	check_number_meals(t_philo *philo)
 {
 	sem_wait(philo->data->eat);
-	if (philo->meal_c >= philo->data->nbr_of_meals
-		&& philo->data->nbr_of_meals != -1)
-		philo->data->full++;
+	if (philo->data->nbr_of_meals > 0
+		&& philo->meal_c >= philo->data->nbr_of_meals)
+	{
+		if (philo->reported_full == false)
+		{
+			philo->reported_full = true;
+			sem_post(philo->data->meals_completed);
+		}
+	}
 	sem_post(philo->data->eat);
-	if (philo->data->full == philo->data->nbr_of_philos)
-		exit(0);
 }
 
 void	grab_forks(t_philo *philo)
@@ -71,4 +75,3 @@ void	eat_sleep_routine(t_philo *philo)
 	print_status(philo, SLEEP);
 	philo_sleep(philo->data, philo->data->time_to_sleep);
 }
-

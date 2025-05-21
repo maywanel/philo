@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 21:49:21 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:33:04 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	set_simulation_end(t_data *data)
 void	print_status(t_philo *philo, char *status)
 {
 	long	current_time;
-	
+
 	pthread_mutex_lock(&philo->data->mtx);
 	if (philo->data->end)
 	{
@@ -46,7 +46,6 @@ void	*lone_philo_routine(t_philo *philo)
 	philo_sleep(philo->data, philo->die_time);
 	print_status(philo, DIED);
 	philo->death = true;
-	// set_simulation_end(philo->data);
 	pthread_mutex_lock(&philo->data->mtx);
 	philo->data->end = true;
 	pthread_mutex_unlock(&philo->data->mtx);
@@ -61,10 +60,7 @@ void	handle_nbr_of_meals(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->data->mtx);
 		if (philo->data->full_philos++ == philo->data->philo_nbr)
-		{
-			// set_simulation_end(philo->data);
 			philo->data->end = true;
-		}
 		pthread_mutex_unlock(&philo->data->mtx);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:48:30 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/16 08:19:18 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:41:14 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,18 @@ void	philo_main_loop(t_philo *philo)
 
 void	monitor_dinner(t_data *data)
 {
-	int		status;
-	int		i;
+	int	status;
+	int	i;
 
 	while (1)
 	{
 		i = 0;
 		while (i < data->nbr_of_philos)
 		{
-			if (waitpid(data->philos[i].pid , &status, WNOHANG) > 0)
+			if (waitpid(data->philos[i].pid, &status, WNOHANG) > 0)
 			{
 				kill_all_pid(data, data->nbr_of_philos);
-				return;
+				return ;
 			}
 			i++;
 		}

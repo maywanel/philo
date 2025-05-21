@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:20:58 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 23:03:30 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:44:39 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,27 @@ static void	clean_all_sems(t_data *data)
 
 static void	init_fork_and_eat_sems(t_data *data)
 {
-	sem_unlink(SEM_PRINT);
-	sem_unlink(SEM_FORKS);
-	sem_unlink(SEM_EAT);
-
+	(sem_unlink(SEM_PRINT), sem_unlink(SEM_FORKS), sem_unlink(SEM_EAT));
 	data->forks = sem_open(SEM_FORKS, O_CREAT, 0644, data->nbr_of_philos);
 	if (data->forks == SEM_FAILED)
-	{
-		print_error("sem_open failure for forks\n");
-		exit(EXIT_FAILURE);
-	}
-	data->eat = sem_open(SEM_EAT, O_CREAT, 0644, data->nbr_of_philos);
+		(print_error("sem_open failure for forks\n"), exit(EXIT_FAILURE));
+	data->eat = sem_open(SEM_EAT, O_CREAT, 0644, 1);
 	if (data->eat == SEM_FAILED)
 	{
-		sem_close(data->forks);
-		sem_unlink(SEM_FORKS);
-		print_error("sem_open failure for eat\n");
-		exit(EXIT_FAILURE);
+		(sem_close(data->forks), sem_unlink(SEM_FORKS));
+		(print_error("sem_open failure for eat\n"), exit(EXIT_FAILURE));
 	}
 	data->print = sem_open(SEM_PRINT, O_CREAT, 0644, 1);
 	if (data->print == SEM_FAILED)
 	{
 		print_error("sem_open failure for print\n");
-		clean_all_sems(data);
-		exit(EXIT_FAILURE);
+		(clean_all_sems(data), exit(EXIT_FAILURE));
+	}
+	data->meals_completed = sem_open("/meals_completed", O_CREAT, 0644, 0);
+	if (data->meals_completed == SEM_FAILED)
+	{
+		print_error("sem_open failure for meals_completed\n");
+		(clean_all_sems(data), exit(EXIT_FAILURE));
 	}
 }
 
