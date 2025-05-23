@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:44:31 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/21 15:10:32 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:04:24 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,51 @@ void	think_routine(t_philo *philo, bool silent)
 
 void	check_number_meals(t_philo *philo)
 {
-	sem_wait(philo->data->eat);
-	if (philo->data->nbr_of_meals > 0
-		&& philo->meal_c >= philo->data->nbr_of_meals)
+
+	if (philo->data->nbr_of_meals == -1)
+		return ;
+	if (philo->data->nbr_of_philos % 2 == 0)
 	{
-		if (philo->reported_full == false)
+		if (philo->id % 2 == 0)
 		{
-			philo->reported_full = true;
-			sem_post(philo->data->meals_completed);
+			if (philo->meal_c >= philo->data->nbr_of_meals)
+			{
+				if (philo->reported_full == false)
+				{
+					philo->reported_full = true;
+					clean_exit(philo->data, 0);
+				}
+			}
+		}
+		else
+			if (philo->meal_c >= philo->data->nbr_of_meals)
+			{
+				if (philo->reported_full == false)
+					philo->reported_full = true;
+			}
+	}
+	else
+	{
+		if (philo->id % 2 != 0)
+		{
+			if (philo->meal_c >= philo->data->nbr_of_meals)
+			{
+				if (philo->reported_full == false)
+				{
+					philo->reported_full = true;
+					clean_exit(philo->data, 0);
+				}
+			}
+		}
+		else
+		{
+			if (philo->meal_c >= philo->data->nbr_of_meals)
+			{
+				if (philo->reported_full == false)
+					philo->reported_full = true;
+			}
 		}
 	}
-	sem_post(philo->data->eat);
 }
 
 void	grab_forks(t_philo *philo)

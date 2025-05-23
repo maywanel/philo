@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:18:51 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/21 15:24:44 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:20:46 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ void	*death_monitor(void *arg)
 			sem_wait(philo->data->print);
 			printf("%ld %d %s\n", get_current_time() - philo->data->start_time,
 				philo->id, DIED);
-			exit(1);
+			philo->death = 1;
+			return (NULL);
 		}
-		usleep(1000);
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -63,20 +64,20 @@ void	philo_routine(t_philo *philo)
 		error_print("Failed to create monitor thread", philo->data);
 		exit(EXIT_FAILURE);
 	}
-	if (pthread_detach(monitor) != 0)
+	if (philo->id % 2 != 0)
+		think_routine(philo, true);
+	philo_main_loop(philo);
+	if (pthread_join(monitor, NULL) != 0)
 	{
 		error_print("Failed to detach monitor thread", philo->data);
 		exit(EXIT_FAILURE);
 	}
-	if (philo->id % 2 != 0)
-		think_routine(philo, true);
-	philo_main_loop(philo);
 }
 
 void	start_the_dinner(t_data *data)
 {
-	int	i;
-
+	int			i;
+		
 	i = 0;
 	while (i < data->nbr_of_philos)
 	{
@@ -84,16 +85,6 @@ void	start_the_dinner(t_data *data)
 			return ;
 		i++;
 		usleep(100);
-	}
-	if (data->nbr_of_meals != -1)
-	{
-		while (1)
-		{
-			sem_wait(data->meals_completed);
-			data->full++;
-			if (data->full == data->nbr_of_philos)
-				return (kill_all_pid(data, data->nbr_of_philos));
-		}
 	}
 	monitor_dinner(data);
 }

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:48:30 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/21 14:41:14 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:16:26 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ void	philo_main_loop(t_philo *philo)
 	while (1)
 	{
 		if (philo->death)
-		{
-			clean(philo->data);
-			exit(1);
-		}
+			clean_exit(philo->data, 0);
 		eat_sleep_routine(philo);
 		check_number_meals(philo);
 		think_routine(philo, false);

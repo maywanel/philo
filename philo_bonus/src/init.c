@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:20:58 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/21 14:44:39 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:12:41 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	init_data(t_data *data, char **argv)
 	data->philos = malloc(sizeof(t_philo) * data->nbr_of_philos);
 	if (!data->philos)
 		(print_error("malloc failure for philos\n"), exit(EXIT_FAILURE));
-	data->pids = calloc(data->nbr_of_philos, sizeof(pid_t));
+	data->pids = malloc(data->nbr_of_philos * sizeof(pid_t));
 	if (!data->pids)
 	{
 		free(data->philos);

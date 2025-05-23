@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:34:40 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/21 15:23:31 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:17:54 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,15 @@ void	clean(t_data *data)
 		free(data->philos);
 	if (data->pids)
 		free(data->pids);
+}
+
+void	clean_exit(t_data *data, int exit_code)
+{	
+	sem_close(data->forks);
+	sem_close(data->eat);
+	sem_close(data->print);
+	sem_close(data->meals_completed);
+	free(data->philos);
+	free(data->pids);
+	exit(exit_code);
 }

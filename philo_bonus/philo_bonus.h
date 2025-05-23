@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/16 11:25:39 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:06:56 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,6 @@ void					init_args(t_data *data, char **argv);
 int						ft_isdigit(int c);
 int						ft_atoi(const char *str);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
+void					clean_exit(t_data *data, int exit_code);
 
 #endif
