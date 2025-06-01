@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:34:40 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/23 21:17:54 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/31 18:14:42 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ void	clean(t_data *data)
 	sem_close(data->forks);
 	sem_close(data->eat);
 	sem_close(data->print);
-	sem_close(data->meals_completed);
-	sem_unlink("/meals_completed");
+	sem_close(data->death);
+	sem_unlink(SEM_D);
 	sem_unlink(SEM_FORKS);
 	sem_unlink(SEM_EAT);
 	sem_unlink(SEM_PRINT);
@@ -65,13 +65,13 @@ void	clean(t_data *data)
 		free(data->pids);
 }
 
-void	clean_exit(t_data *data, int exit_code)
-{	
+void	clean_child(t_data *data)
+{
 	sem_close(data->forks);
 	sem_close(data->eat);
 	sem_close(data->print);
-	sem_close(data->meals_completed);
+	sem_close(data->death);
+	sem_unlink(SEM_FORKS);
 	free(data->philos);
 	free(data->pids);
-	exit(exit_code);
 }

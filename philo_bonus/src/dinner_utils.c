@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:44:31 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/23 21:04:24 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/31 18:25:20 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,54 +26,32 @@ void	think_routine(t_philo *philo, bool silent)
 		time_to_think = 200;
 	if (silent == false)
 		print_status(philo, THINK);
-	philo_sleep(philo->data, time_to_think);
+	philo_sleep(time_to_think);
 }
 
 void	check_number_meals(t_philo *philo)
 {
-
 	if (philo->data->nbr_of_meals == -1)
 		return ;
+	if (philo->meal_c < philo->data->nbr_of_meals)
+		return ;
+	if (philo->reported_full)
+		return ;
+	philo->reported_full = true;
 	if (philo->data->nbr_of_philos % 2 == 0)
 	{
 		if (philo->id % 2 == 0)
 		{
-			if (philo->meal_c >= philo->data->nbr_of_meals)
-			{
-				if (philo->reported_full == false)
-				{
-					philo->reported_full = true;
-					clean_exit(philo->data, 0);
-				}
-			}
+			clean_child(philo->data);
+			sem_post(philo->data->death);
 		}
-		else
-			if (philo->meal_c >= philo->data->nbr_of_meals)
-			{
-				if (philo->reported_full == false)
-					philo->reported_full = true;
-			}
 	}
 	else
 	{
 		if (philo->id % 2 != 0)
 		{
-			if (philo->meal_c >= philo->data->nbr_of_meals)
-			{
-				if (philo->reported_full == false)
-				{
-					philo->reported_full = true;
-					clean_exit(philo->data, 0);
-				}
-			}
-		}
-		else
-		{
-			if (philo->meal_c >= philo->data->nbr_of_meals)
-			{
-				if (philo->reported_full == false)
-					philo->reported_full = true;
-			}
+			clean_child(philo->data);
+			sem_post(philo->data->death);
 		}
 	}
 }
@@ -103,9 +81,9 @@ void	eat_sleep_routine(t_philo *philo)
 	philo->meal_c++;
 	sem_post(philo->data->eat);
 	print_status(philo, EAT);
-	philo_sleep(philo->data, philo->data->time_to_eat);
+	philo_sleep(philo->data->time_to_eat);
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
 	print_status(philo, SLEEP);
-	philo_sleep(philo->data, philo->data->time_to_sleep);
+	philo_sleep(philo->data->time_to_sleep);
 }

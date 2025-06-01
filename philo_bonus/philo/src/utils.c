@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 14:44:43 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/31 18:14:50 by moel-mes         ###   ########.fr       */
+/*   Created: 2025/03/15 01:42:52 by moel-mes          #+#    #+#             */
+/*   Updated: 2025/05/15 21:25:27 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo_bonus.h"
+#include "../philo.h"
 
 long	ft_atol(char *str)
 {
@@ -20,11 +20,13 @@ long	ft_atol(char *str)
 	num = 0;
 	i = 0;
 	str = valid_input(str);
+	if (!str)
+		return (-1);
 	while (ft_isdigit(str[i]))
 	{
 		num = (num * 10) + (str[i] - 48);
 		if (num > 2147483647)
-			(print_error("number is too large\n"), exit(1));
+			return (write(2, " is too high\n", 14), -1);
 		i++;
 	}
 	if (str[i] != '\0')
@@ -32,23 +34,9 @@ long	ft_atol(char *str)
 		if (str[i] == ' ' || str[i] == '\n' || str[i] == '\t')
 			return (num);
 		else
-		{
-			printf("%s", str);
-			print_error(" not numeric\n");
-		}
+			return (write(2, "only numeric\n", 14), -1);
 	}
 	return (num);
-}
-
-void	print_status(t_philo *philo, char *status)
-{
-	long	timestamp;
-
-	sem_wait(philo->data->print);
-	timestamp = get_current_time() - philo->data->start_time;
-	printf("%ld %d %s\n", timestamp, philo->id, status);
-	if (ft_strncmp(status, DIED, 10) != 0)
-		sem_post(philo->data->print);
 }
 
 long	get_current_time(void)
@@ -59,30 +47,48 @@ long	get_current_time(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	philo_sleep(long time)
+void	philo_sleep(t_data *data, long milliseconds)
 {
 	long	start;
-	long	current;
-	long	elapsed;
+	long	test;
+	bool	simulation_ended;
 
 	start = get_current_time();
-	elapsed = 0;
-	while (elapsed < time)
+	while (1)
 	{
-		usleep(500);
-		current = get_current_time();
-		elapsed = current - start;
+		test = get_current_time() - start;
+		if (test >= milliseconds)
+			break ;
+		pthread_mutex_lock(&data->mtx);
+		simulation_ended = data->end;
+		pthread_mutex_unlock(&data->mtx);
+		if (simulation_ended)
+			break ;
+		usleep(200);
 	}
 }
 
-void	init_args(t_data *data, char **argv)
+int	ft_atoi(const char *str)
 {
-	data->nbr_of_philos = ft_atol(argv[1]);
-	data->time_to_die = ft_atol(argv[2]);
-	data->time_to_eat = ft_atol(argv[3]);
-	data->time_to_sleep = ft_atol(argv[4]);
-	if (argv[5])
-		data->nbr_of_meals = ft_atol(argv[5]);
-	else
-		data->nbr_of_meals = -1;
+	int	i;
+	int	sign;
+	int	result;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-')
+		sign = -1;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] >= '0' && str[i] <= '9')
+		result = result * 10 + (str[i++] - '0');
+	return (sign * result);
+}
+
+int	ft_isdigit(int c)
+{
+	return (c >= 48 && c <= 57);
 }

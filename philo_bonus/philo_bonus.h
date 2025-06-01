@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/23 21:06:56 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/05/31 18:05:17 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define SEM_FORKS "/sem_forks"
 # define SEM_EAT "/sem_eat"
 # define SEM_PRINT "/sem_print"
+# define SEM_D "/sem_death"
 
 # define FORK "has taken a fork"
 # define EAT "is eating"
@@ -52,7 +53,7 @@ typedef struct s_data
 	sem_t				*forks;
 	sem_t				*eat;
 	sem_t				*print;
-	sem_t				*meals_completed;
+	sem_t				*death;
 	t_philo				*philos;
 	pid_t				*pids;
 }						t_data;
@@ -71,7 +72,7 @@ typedef struct s_philo
 long					ft_atol(char *str);
 void					print_status(t_philo *philo, char *status);
 long					get_current_time(void);
-void					philo_sleep(t_data *data, long time);
+void					philo_sleep(long time);
 void					init_philo(t_philo *philo, int id, t_data *data);
 void					init_philos(t_philo *philos, t_data *data);
 void					init_data(t_data *data, char **argv);
@@ -97,6 +98,6 @@ void					init_args(t_data *data, char **argv);
 int						ft_isdigit(int c);
 int						ft_atoi(const char *str);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
-void					clean_exit(t_data *data, int exit_code);
+void					clean_child(t_data *data);
 
 #endif
