@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:18:51 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/31 18:25:01 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/02 08:56:24 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	lone_philo_routine(t_philo *philo)
 	print_status(philo, FORK);
 	usleep(philo->data->time_to_die * 1000);
 	print_status(philo, DIED);
-	exit(1);
+	exit(0);
 }
 
 void	*death_monitor(void *arg)
@@ -35,12 +35,12 @@ void	*death_monitor(void *arg)
 		if (time_since_last_meal > philo->data->time_to_die)
 		{
 			print_status(philo, DIED);
-			philo->death = 1;
-			sem_post(philo->data->print);
 			sem_post(philo->data->death);
 			return (NULL);
 		}
-		sem_post(philo->data->eat);
+		if (philo->death)
+			return (NULL);
+    	sem_post(philo->data->eat);
 		usleep(100);
 	}
 	return (NULL);
@@ -67,7 +67,7 @@ void	philo_routine(t_philo *philo)
 		exit(EXIT_FAILURE);
 	}
 	if (philo->id % 2 != 0)
-		think_routine(philo, true);
+		usleep(500);
 	philo_main_loop(philo);
 }
 

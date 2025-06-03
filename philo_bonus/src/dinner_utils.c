@@ -6,55 +6,11 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:44:31 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/31 18:25:20 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/02 08:41:41 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_bonus.h"
-
-void	think_routine(t_philo *philo, bool silent)
-{
-	long	time_to_think;
-
-	time_to_think = (philo->data->time_to_die - (get_current_time()
-				- philo->last_meal) - philo->data->time_to_eat) / 2;
-	if (time_to_think < 0)
-		time_to_think = 0;
-	if (time_to_think > philo->data->time_to_die)
-		time_to_think = 0;
-	if (time_to_think > 600)
-		time_to_think = 200;
-	if (silent == false)
-		print_status(philo, THINK);
-	philo_sleep(time_to_think);
-}
-
-void	check_number_meals(t_philo *philo)
-{
-	if (philo->data->nbr_of_meals == -1)
-		return ;
-	if (philo->meal_c < philo->data->nbr_of_meals)
-		return ;
-	if (philo->reported_full)
-		return ;
-	philo->reported_full = true;
-	if (philo->data->nbr_of_philos % 2 == 0)
-	{
-		if (philo->id % 2 == 0)
-		{
-			clean_child(philo->data);
-			sem_post(philo->data->death);
-		}
-	}
-	else
-	{
-		if (philo->id % 2 != 0)
-		{
-			clean_child(philo->data);
-			sem_post(philo->data->death);
-		}
-	}
-}
 
 void	grab_forks(t_philo *philo)
 {
@@ -86,4 +42,18 @@ void	eat_sleep_routine(t_philo *philo)
 	sem_post(philo->data->forks);
 	print_status(philo, SLEEP);
 	philo_sleep(philo->data->time_to_sleep);
+}
+
+void	philo_main_loop(t_philo *philo)
+{
+	while (1)
+	{
+		eat_sleep_routine(philo);
+		if (philo->meal_c > philo->data->nbr_of_meals)
+		{
+			philo->death = 1;
+			sem_post(philo->data->death);
+		}
+		print_status(philo, THINK);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/31 18:05:17 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/02 08:42:11 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,10 @@ void					eat_sleep_routine(t_philo *philo);
 void					*death_monitor(void *arg);
 void					philo_routine(t_philo *philo);
 void					start_the_dinner(t_data *data);
-void					think_routine(t_philo *philo, bool silent);
-void					check_number_meals(t_philo *philo);
 void					grab_forks(t_philo *philo);
 void					lone_philo_routine(t_philo *philo);
-void					*parent_death_monitor(void *arg);
 void					philo_main_loop(t_philo *philo);
 int						start_philo_process(t_data *data, int i);
-void					monitor_dinner(t_data *data);
 void					wrong_nbr_of_arg(void);
 void					error_print(char *str, t_data *data);
 void					kill_all_pid(t_data *data, int last);
