@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:44:43 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/31 18:14:50 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:03:42 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,28 @@ long	get_current_time(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	philo_sleep(long time)
+void	philo_sleep(t_data *data, long time)
 {
 	long	start;
 	long	current;
 	long	elapsed;
+	int		i;
+	t_philo	*philo;
 
 	start = get_current_time();
+	i = 0;
+	while (i < data->nbr_of_philos)
+	{
+		philo = &data->philos[i];
+		if (philo->pid == getpid())
+			break ;
+		i++;
+	}
 	elapsed = 0;
 	while (elapsed < time)
 	{
+		if (i < data->nbr_of_philos && philo->death)
+			(clean(data), exit(1));
 		usleep(500);
 		current = get_current_time();
 		elapsed = current - start;
