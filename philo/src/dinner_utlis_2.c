@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:46:00 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 21:25:11 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:22:48 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	check_routine(t_philo *philo, bool *simulation_ended)
 {
 	eat_sleep_routine(philo);
 	handle_nbr_of_meals(philo);
-	think_routine(philo, false);
+	print_status(philo, THINK);
+	usleep(200);
 	pthread_mutex_lock(&philo->data->mtx);
 	*simulation_ended = philo->data->end;
 	pthread_mutex_unlock(&philo->data->mtx);

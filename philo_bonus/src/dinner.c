@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:18:51 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/06/11 19:03:26 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/12 00:15:18 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	lone_philo_routine(t_philo *philo)
 {
+	philo->data->start_time = get_current_time();
 	print_status(philo, FORK);
 	usleep(philo->data->time_to_die * 1000);
 	sem_wait(philo->data->print);
@@ -35,16 +36,17 @@ void	*death_monitor(void *arg)
 		current_time = get_current_time();
 		sem_wait(philo->data->eat);
 		time_since_last_meal = current_time - philo->last_meal;
-		sem_post(philo->data->eat);
 		if (time_since_last_meal > philo->data->time_to_die)
 		{
 			sem_wait(philo->data->print);
 			printf("%ld %d %s\n", get_current_time() - philo->data->start_time,
 				philo->id, DIED);
+			sem_post(philo->data->eat);
 			sem_post(philo->data->dead);
 			return (NULL);
 		}
-		usleep(1000);
+		sem_post(philo->data->eat);
+		usleep(500);
 	}
 	return (NULL);
 }
@@ -53,8 +55,9 @@ void	philo_routine(t_philo *philo)
 {
 	pthread_t	monitor;
 
-	philo->pid = getpid();
+	sem_wait(philo->data->eat);
 	philo->last_meal = get_current_time();
+	sem_post(philo->data->eat);
 	if (philo->data->nbr_of_philos == 1)
 	{
 		lone_philo_routine(philo);
@@ -70,6 +73,8 @@ void	philo_routine(t_philo *philo)
 		error_print("Failed to detach monitor thread", philo->data);
 		exit(EXIT_FAILURE);
 	}
+	if (philo->id % 2 == 0)
+		usleep(100);
 	philo_main_loop(philo);
 }
 
@@ -78,12 +83,12 @@ void	start_the_dinner(t_data *data)
 	int	i;
 
 	i = 0;
+	data->start_time = get_current_time();
 	while (i < data->nbr_of_philos)
 	{
 		if (start_philo_process(data, i) == -1)
 			return ;
 		i++;
-		usleep(100);
 	}
 	sem_wait(data->dead);
 	kill_all_pid(data, data->nbr_of_philos);

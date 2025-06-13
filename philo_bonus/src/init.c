@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 13:20:58 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/06/11 19:03:34 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:20:58 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	init_data(t_data *data, char **argv)
 		print_error("number of philosophers is too low\n");
 		exit(EXIT_FAILURE);
 	}
-	data->start_time = get_current_time();
 	data->full = 0;
 	data->philos = malloc(sizeof(t_philo) * data->nbr_of_philos);
 	if (!data->philos)

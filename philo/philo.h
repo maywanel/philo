@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 01:10:41 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/15 08:43:18 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:23:20 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void					print_status(t_philo *philo, char *status);
 void					philo_sleep(t_data *data, long milliseconds);
 int						create_threads(t_data *data, pthread_t *monitor);
 void					*monitor_routine(void *data_ptr);
-void					think_routine(t_philo *philo, bool silent);
 void					acquire_forks(t_philo *philo);
 void					handle_nbr_of_meals(t_philo *philo);
 void					set_simulation_end(t_data *data);

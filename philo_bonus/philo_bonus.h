@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 01:57:18 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/06/11 18:58:09 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:41:15 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_philo
 long					ft_atol(char *str);
 void					print_status(t_philo *philo, char *status);
 long					get_current_time(void);
-void					philo_sleep(t_data *data, long time);
+void					philo_sleep(long time);
 
 /* Init */
 void					init_philo(t_philo *philo, int id, t_data *data);

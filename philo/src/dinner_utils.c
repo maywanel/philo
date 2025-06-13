@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 18:35:05 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/05/21 15:33:04 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:23:04 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,4 @@ void	handle_nbr_of_meals(t_philo *philo)
 			philo->data->end = true;
 		pthread_mutex_unlock(&philo->data->mtx);
 	}
-}
-
-void	think_routine(t_philo *philo, bool silent)
-{
-	long	time_to_think;
-
-	pthread_mutex_lock(&philo->data->mtx);
-	time_to_think = (philo->die_time - (get_current_time() - philo->last_meal)
-			- philo->eat_time) / 2;
-	pthread_mutex_unlock(&philo->data->mtx);
-	if (time_to_think < 0)
-		time_to_think = 0;
-	if (time_to_think + philo->eat_time >= philo->die_time)
-		time_to_think = 0;
-	if (time_to_think > 600)
-		time_to_think = 500;
-	if (silent == false)
-		print_status(philo, THINK);
-	philo_sleep(philo->data, time_to_think);
 }

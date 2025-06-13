@@ -6,7 +6,7 @@
 /*   By: moel-mes <moel-mes@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:44:31 by moel-mes          #+#    #+#             */
-/*   Updated: 2025/06/11 19:03:20 by moel-mes         ###   ########.fr       */
+/*   Updated: 2025/06/12 00:23:50 by moel-mes         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	philo_main_loop(t_philo *philo)
 			return ;
 		}
 		print_status(philo, THINK);
+		usleep(200);
 	}
 }
 
@@ -52,11 +53,11 @@ void	eat_sleep_routine(t_philo *philo)
 	philo->meal_c++;
 	sem_post(philo->data->eat);
 	print_status(philo, EAT);
-	philo_sleep(philo->data, philo->data->time_to_eat);
+	philo_sleep(philo->data->time_to_eat);
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
 	print_status(philo, SLEEP);
-	philo_sleep(philo->data, philo->data->time_to_sleep);
+	philo_sleep(philo->data->time_to_sleep);
 }
 
 void	*parent_death_monitor(void *arg)
